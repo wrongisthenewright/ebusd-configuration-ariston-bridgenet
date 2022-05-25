@@ -1,7 +1,5 @@
 #|/bin/bash
 docker pull john30/ebusd
-docker logs ebusd > /home/oper/Docker/Ebusd/logs/container.log
-sudo /home/oper/Docker/Scripts/UTIL/clear_container_log.sh -c ebusd
 docker stop ebusd
 docker rm ebusd
 
