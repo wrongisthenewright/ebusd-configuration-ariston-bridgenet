@@ -1,0 +1,128 @@
+# Ariston Genus One Hybrid Net Ebusd configuration (may work with similar Chaffoteaux and Elco systems)
+# Menu References are based on complete hybrid system, numbers may change on boiler/heatpump only configurations
+# type (r[1-9];w;u),class,name,comment,QQ,ZZ,PBSB,ID,field,part (m/s),type / templates,divider / values,unit,comment,field,part (m/s),type / templates,divider / values,unit,comment,field,part (m/s),type / templates,divider / values,unit,comment,field,part (m/s),type / templates,divider / values,unit,comment,AG,AH
+
+
+#
+#System Broadcast Broadcast
+r,broadcast,cast_date,Cast Date,,fe,2070,,time,s,VTM,,,,date,s,HDA,,,,,,,,,,,,,,,,,,,,,,,,
+#w,boiler,ebus_reset,Reset ebus,,fe,2034,,ebus_reset,m,IGN,,,,,,,,,,,,,,,,,,,,,,
+#broadcast
+r,broadcast,ext_temp,External Temp,,fe,200f,7647,,s,UIN,10,°C
+
+
+#Boiler direct ask
+r2,boiler,boiler_pressure,Boiler circuit pressure,,3c,2000,7547,ign,s,IGN,,,,boiler_pressure,,UCH,10
+r2,boiler,heating_temp_out,heating temperature,,3c,2000,6810,ign,s,IGN:1,,,,,,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r2,boiler,heating_temp_return,heating return temperature,,3c,2000,6910,ign,s,IGN:1,,,,,,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r1,boiler,flame_power,Flame Power,,3c,2000,c104,ign,s,IGN:1,,,,,,HEX,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,diverter_cycles,Number of diverter valve cycles,,3c,2000,40d2,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,ignition_cycles,Number of ignition cycles,,3c,2000,42d8,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,circulation_time,circulation time,,3c,2000,44aF,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,boiler_life_time,Boiler Life Time,,3c,2000,50d9,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,boiler_circulation_cycles,Number of circulation cycles,,3c,2000,44d2,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,boiler_fan_cycles,Number of fan cycles,,3c,2000,4CD2,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,hours_burner_on,Hours Burner On,,3c,2000,4bd1,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r2,boiler,heating_flame,Heating in progress,,3c,2001,0c19,heating_flame,s,IGN:1,,,,,,UCH,1=on;0=off,,,,,
+
+#Boiler Broadcast
+r,boiler,room_temp,Room temperature,37,fe,200f,7118,room_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,boiler_status,Boiler Status,37,fe,2010,c04b,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;24=comfort;51=low water pressure;52=no flame,,,,,IGN:3,,,,,,IGN,,,,,
+
+#hybrid and Heatpump Broadcast
+r,hybrid,z1_day_temp_bcast,,13,fe,200e,6271,,s,UIN,10,°C
+r,hybrid,z1_night_temp_bcast,,13,fe,200e,6371,,s,UIN,10,°C
+r,hybrid,z1_set_temp_bcast,,13,fe,200e,6571,,s,UIN,10,°C
+
+
+
+
+
+
+
+
+#Hybrid and Heatpump direct ask
+#Hybrid Status tbd
+r2,hybrid,hybrid_winter_mode,Winter Mode,,18,2000,0120,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,hybrid,hybrid_summer_mode,Summer Mode,,18,2000,0220,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,hybrid,hybrid_cooling_mode,Cooling Mode,,18,2000,0320,,s,IGN:1,,,,,,BCD,0=off;1=on
+#r2,hybrid,hybrid_off_mode,Shutoff Mode,,18,2000,0420,,s,IGN:1,,,,,,BCD,0=off;1=on
+
+#4 Menu Z1 Settings
+#4.0 Menu - Z1 Setpoint
+r2,hybrid,z1_day_temp,Z1 Day Temp,,18,2000,6271,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_night_temp,Z1 Night Temp,,18,2000,6371,,s,IGN:1,,,,,,UIN,10,°C
+#r,hybrid,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,,,6571,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_antifreeze_temp,Z1 Antifreeze Temp,,18,2000,6426,,s,IGN:1,,,,,,UIN,10,°C
+#4.1 Menu - Z1 Summer Winter Changeover
+r,hybrid,z1_summer_winter_auto_switch,Z1 Summer Winter Auto Switch,,18,2000,0781,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,hybrid,z1_summer_winter_temp_thresh,Z1 Summer Winter Threshold Temp,,18,2000,7971,,s,IGN:1,,,,,,UIN,10,°C
+r,hybrid,z1_summer_winter_switch_delay_time,Z1 Summer Winter Switch Delay Time,,18,2000,7A71,,s,IGN:1,,,,,,UIN,,min
+#4.2 Menu - Z1 Heating Settings
+r2,hybrid,z1_heat_temp_range,Z1 Heating Temp Range,,18,2000,0081,,s,IGN:1,,,,,,BCD,0=high;1=low
+r2,hybrid,z1_heat_therm_type_selection,Z1 Heating Thermoreg Type Selection,,18,2000,C079,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
+r2,hybrid,z1_heat_slope,Z1 Heat Thermoreg Slope,,18,2000,6a71,,s,IGN:1,,,,,,UIN,100
+r2,hybrid,z1_heat_offset,Z1 Heat Thermoreg Offset,,18,2000,6471,,s,IGN:1,,,,,,SCH,10
+r2,hybrid,z1_heat_room_temp_infl,Z1 Heating Room Temp Influence,,18,2000,c279,,s,IGN:1,,,,,,UCH
+r2,hybrid,z1_heat_water_max_temp,Z1 Heating Max Water Temp,,18,2000,6071,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_heat_water_min_temp,Z1 Heating Min Water Temp,,18,2000,6171,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_heat_request_mode,Z1 Heating Request Mode,,18,2000,ce79,,s,IGN:1,,,,,,BCD,0=standard;1=no_time_program;2=forced
+#4.3 Menu - Z1 Diagnostic
+r2,hybrid,z1_room_temp,Z1 Room Temp,,18,2000,7118,,s,IGN:1,,,,,,UIN,10,°C
+r,hybrid,z1_heat_setpoint_temp_check,Z1 Heating Check Temp,,18,2000,6996,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_heat_request,Z1 Heating Request,,18,2000,0191,,s,IGN:1,,,,,,BCD,0=off;1=on
+#4.4 Menu - Z1 Cooling Settings
+r2,hybrid,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,18,2000,7071,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
+r2,hybrid,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,18,2000,CB79,,s,IGN:1,,,,,,BCD,0=on-off;1=fixed_temp;2=toom_temp
+r2,hybrid,z1_cool_slope,Z1 Cool Thermoreg Slope,,18,2000,7671,,s,IGN:1,,,,,,UIN,100
+r2,hybrid,z1_cool_offset,Z1 Cool Thermoreg Offset,,18,2000,7571,,s,IGN:1,,,,,,SCH,10
+r2,hybrid,z1_cool_water_max_temp,Z1 Cooling Max Water Temp,,18,2000,7171,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,z1_cool_water_min_temp,Z1 Cooling Min Water Temp,,18,2000,7371,,s,IGN:1,,,,,,UIN,10,°C
+#12.12 Menu - HP Diagnostic 1 Menu
+r2,hybrid,hybrid_ext_temp,External Temp,,18,2000,7810,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,heatpump_water_flow_temp,Heatpump Waterflow T emp,,18,2000,7610,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,heatpump_water_return_temp,Heatpump Water Return Temp,,18,2000,7710,,s,IGN:1,,,,,,UIN,10,°C
+r5,hybrid,max_modulation,HP Max Modulation tbd,,18,2000,c446,max_modulation,s,UIN,,,,,,,,,,,,,,,,,,,,,,,,
+r,hybrid,heatpump_evaporator_temp,Heatpumo Evaporator Temp,,18,2000,7910,,s,IGN:1,,,,,,UIN,10,°C
+r,hybrid,heatpump_suction_temp,Heatpump Suction Temp,,18,2000,7217,,s,IGN:1,,,,,,UIN,10,°C
+r,hybrid,heatpump_comp_discharge_temp,Heatpump Compr Discharge Temp,,18,2000,7317,,s,IGN:1,,,,,,UIN,10,°C
+r,hybrid,heatpump_condenser_outlet_temp,Heatpump Condenser Outlet Temp,,18,2000,7117,,s,IGN:1,,,,,,UIN,10,°C
+r2,heatpump,heatpump_teo_temp,Heatpump TEO Temp,,1e,2000,7417,,s,IGN:1,,,,,,UIN,10,°C
+#12.13 Menu - HP Diagnostic 2 Menu
+r2,heatpump,heatpump_mode,Heatpump Operating Mode,,1e,2000,CA46,,s,IGN:1,,,,,,UCH,0=OFF;1=Stand_by;2=Cooling;3=Heating;4=Heating_boost;5=Cooling_boost;6=Heating_rating;7=Cooling_rating;8=Antifreeze;9=Defrost;10=Overtemp_prot;11=Timeguard;12=System_error;13=Reset_service;14=Coolant_recovery;15=Soft_fail,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r3,hybrid,heatpump_last_error,Heatpump Last Error - TBC,,18,2000,C54B,,s,IGN:1,,,,,,BCD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r4,hybrid,heatpump_safety_thermostat,Heatpump Safety Thermostat,,18,2000,1A11,,s,IGN:1,,,,,,BCD,0=open;1=closed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r2,heatpump,heatpump_flowmeter,Heatpump Flow Meter,,1e,2000,6e13,,s,IGN:1,,,,,,UIN,10
+r2,heatpump,heatpump_flow_switch,Flow Switch State,,1e,2000,0C45,,s,IGN:1,,,,,,BCD,0=open;1=closed
+r,heatpump,heatpump_shutoff_protection,Heatpump Compressor Shutoff Protection,,1e,2000,1045,,s,IGN:1,,,,,,BCD,0=off;1=on,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r5,heatpump,heatpump_evap_press,Heatpump Evapourator Pressure,,1e,2000,6c4f,,s,IGN:1,,,,,,UIN,10
+r,heatpump,heatpump_cond_press,Heatpump Condenser Pressure,,1e,2000,6d4f,,s,IGN:1,,,,,,UIN,10
+#12.14 Menu - HP Diagnostic 3 Menu
+r,heatpump,heatpump_inverter_nominal_power,Heatpump Inverter Nominal Power,,1e,2000,6947,,s,IGN:1,,,,,,UIN,,kW
+r2,heatpump,heatpump_compr_frequency,Heatpump Compressor Frequency,,1e,2001,cb46,,s,UIN
+r2,heatpump,heatpump_compr_modulation,Heatpump Compressor Modulation,,1e,2001,c446,,s,UIN
+r,heatpump,heatpump_electric_heater,Heatpump Electric Heater,,1e,2000,1c45,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,heatpump,heatpump_main_pump,Heatpump Main Pump,,1e,2000,c200,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,heatpump,heatpump_fan1_speed,Heatpump Fan1 Speed,,1e,2000,6e4f,,s,IGN:1,,,,,,UIN
+r,heatpump,heatpump_fan2_speed,Heatpump Fan2 Speed,,1e,2000,6f4f,,s,IGN:1,,,,,,UIN
+r,heatpump,heatpump_exp_valve,Heatpump Espansion Valve,,1e,2000,704f,,s,IGN:1,,,,,,UIN
+r2,heatpump,heatpump_compr_current,Heatpump Comp Current,,1e,2001,714f,,s,UIN,10,A
+#12.15 Menu - HP Diagnostic 4 Menu
+r2,heatpump,heatpump_compressor_state,Heatpump Compr State,,1e,2001,1145,,s,BCD,0=off;1=on
+r,heatpump,heatpump_preheater_state,Heatpump PreHeater State,,1e,2001,1245,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,heatpump,heatpump_fan1_state,Heatpump Fan1 State,,1e,2001,1445,,s,BCD,0=off;1=on
+r,heatpump,heatpump_fan2_state,Heatpump Fan2 State,,1e,2001,1545,,s,BCD,0=off;1=on
+r2,heatpump,heatpump_4way_valve_state,Heatpump 4Way Valve State,,1e,2001,1345,,s,BCD,0=heating;1=cooling
+r,heatpump,heatpump_base_pane_heater_state,Heatpump Base Pane Heater State,,1e,2001,1645,,s,BCD,0=off;1=on
+#12.16 Menu - EM Diagnostics - 1 Input Menu
+r2,hybrid,heatpump_status,Heatpump State,,18,2000,c94b,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,hybrid,heatpump_heat_temp,CH Flow Set T only read (°C),,18,2000,6047,,s,IGN:1,,,,,,UIN,10,°C
+r,heatpump,heatpump_dhw_store_temp,DHW Storage Water Temp,,18,2000,7017,,s,IGN:1,,,,,,UIN,10,°C
+r2,hybrid,heatpump_hv_inv_1,HV IN 1,,18,2000,1d11,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,hybrid,heatpump_hv_inv_2,HV IN 2,,18,2000,1c11,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,hybrid,heatpump_hv_inv_3,HV IN 3,,18,2000,1f11,,s,IGN:1,,,,,,BCD,0=off;1=on
+r2,hybrid,heatpump_aux1_input,AUX 1 Input State,,18,2000,1e11,,s,IGN:1,,,,,,BCD,0=off;1=on
+#Other Undocumented Values
+r2,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,7c4f,,s,IGN:1,,,,,,UIN,,W
+
