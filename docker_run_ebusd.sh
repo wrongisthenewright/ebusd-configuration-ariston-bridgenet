@@ -1,12 +1,8 @@
-#|/bin/bash
+#!/bin/bash
 docker pull john30/ebusd
 docker stop ebusd
 docker rm ebusd
 
-docker pull john30/ebusd
-
-
-#scanconfig enabled
 #For DanMan adapter  YOUR_DEVICE_DETAILS=DEVICE_IP_ADDRESS:3333
 docker run -d --name=ebusd --network YOUR_NETWORK -p 8888:8888 -p 8008:8008 \
 -v /YOUR_PATH/Ebusd/configuration:/etc/ebusd \
