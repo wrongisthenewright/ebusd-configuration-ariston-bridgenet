@@ -37,5 +37,8 @@ I followed this procedure:
 Since Bridgenet uses PBSB specific command to read and write the data the configuration as of now is configured only for read operations, albeit with many direct ask instructions.
 Many if not all the data are broadcasted on rebular basis on the bus by the various device connected, It should be possible to get the same values simply sniffing the traffic, ATM I just set polling request for the most useful ones (to me).
 
+To have some metrics correctly shown in Home Assistant you nee to tweak mqtt-hassio.cfg to remove some filter.
+
 All the working codes are the result of a fantastic job made by some user of the italian forum energeticambiente.it, many thanks Gruppo and friends!
-I've realized just now that some boiler code s came from https://github.com/komw/ariston-bus-bridgenet-ebusd, thank you Komw!
+
+I've realized just now that some boiler codes came from https://github.com/komw/ariston-bus-bridgenet-ebusd, thank you Komw!
