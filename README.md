@@ -38,6 +38,4 @@ Since Bridgenet uses PBSB specific command to read and write the data the config
 Many if not all the data are broadcasted on rebular basis on the bus by the various device connected, It should be possible to get the same values simply sniffing the traffic, ATM I just set polling request for the most useful ones (to me).
 
 All the working codes are the result of a fantastic job made by some user of the italian forum energeticambiente.it, many thanks Gruppo and friends!
-
-
-
+I've realized just now that some boiler code s came from https://github.com/komw/ariston-bus-bridgenet-ebusd, thank you Komw!
