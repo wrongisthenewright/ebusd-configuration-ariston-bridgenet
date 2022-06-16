@@ -24,6 +24,8 @@ r,boiler,boiler_fan_cycles,Number of fan cycles,,3c,2000,4CD2,ign,s,IGN:1,,,,,,U
 r,boiler,hours_burner_on,Hours Burner On,,3c,2000,4bd1,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
 r,boiler,heating_flame,Heating in progress,,3c,2001,0c19,heating_flame,s,IGN:1,,,,,,UCH,1=on;0=off,,,,,
 
+
+
 #Broadcast messages
 r,sensys,z1_room_temp,Z1 Room temperature,,fe,2020,7118,room_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z2_room_temp,Z2 Room temperature,,fe,2020,7218,room_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
@@ -41,9 +43,9 @@ r,sensys,z1_night_temp,Z1 Day temperature,,fe,200e,6371,z1_night_temp,s,UIN,10,�
 r,sensys,z2_night_temp,Z2 Day temperature,,fe,200e,6372,z2_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z3_night_temp,Z3 Day temperature,,fe,200e,6373,z3_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,antifreeze_temp,Z1 Antifreeze temperature,,fe,200e,6426,antifreeze_temp_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,winter_mode,Winter Mode,,fe,200f,0120,,s,BCD,0=off;1=on
+#r,sensys,winter_mode,Winter Mode,,fe,200f,0120,,s,BCD,0=off;1=on
 r,sensys,auto_mode,Auto Mode,,fe,200f,0520,,s,BCD,0=off;1=on
-r,sensys,summer_mode,Summer Mode,,fe,200f,0220,,s,BCD,0=off;1=on
+#r,sensys,summer_mode,Summer Mode,,fe,200f,0220,,s,BCD,0=off;1=on
 
 
 #Boiler Broadcast
@@ -155,7 +157,7 @@ r,hybrid,z3_cool_water_min_temp,Z3 Cooling Min Water Temp,,18,2000,7373,,s,IGN:1
 
 
 #12.12 Menu - HP Diagnostic 1 Menu
-r,hybrid,hybrid_ext_temp,External Temp,,18,2000,7810,,s,IGN:1,,,,,,UIN,10,°C
+r,heatpump,heatpump_ext_temp,External Temp,,18,2000,7810,,s,IGN:1,,,,,,UIN,10,°C
 r,hybrid,heatpump_water_flow_temp,Heatpump Waterflow T emp,,18,2000,7610,,s,IGN:1,,,,,,UIN,10,°C
 r,hybrid,heatpump_water_return_temp,Heatpump Water Return Temp,,18,2000,7710,,s,IGN:1,,,,,,UIN,10,°C
 r,hybrid,max_modulation,HP Max Modulation tbd,,18,2000,c446,max_modulation,s,UIN,,,,,,,,,,,,,,,,,,,,,,,,
@@ -199,10 +201,17 @@ r,hybrid,heatpump_hv_inv_2,HV IN 2,,18,2000,1c11,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,hybrid,heatpump_hv_inv_3,HV IN 3,,18,2000,1f11,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,hybrid,heatpump_aux1_input,AUX 1 Input State,,18,2000,1e11,,s,IGN:1,,,,,,BCD,0=off;1=on
 #Other Undocumented Values
-r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,7c4f,,s,IGN:1,,,,,,UIN,,W
+#r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,7c4f,,s,IGN:1,,,,,,UIN,,W
+r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,63477c4f,,s,IGN:3,,,,,,UIN,,W
 
 #Attempt to sniff some traffic
 r,heatpump,compressor_info,Heatpump Compressor Data,7f,1e,2000,cb4673177217,,s,IGN:1,,,,compressor_frequency,s,UCH,,Hz,,compressor_suction_temp,s,UIN,10,°C,,compressor_discharge_temp,s,UIN,10,°C
 r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,,s,IGN:1,,,,water_flow_temp,s,UIN,10,°C,,water_return_temp,s,UIN,10,°C,,evaporator_temp,s,UIN,10,°C,,flow_meter,s,UIN,10,L
+r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:7,,,,coolant_temp,s,UIN,10,°C
 r,heatpump,water_pump_info,Heatpump Water Pump Data,70,18,2000,c2000601,,s,IGN:1,,,,main_pump_status,s,BCD,0=off;1=on,,,heat_dhw_valve_mode,s,BCD,0=heating;1=dhw
 r,heatpump,heatpump_info,Heatpump Operating Mode,,18,2000,d140ca46,,s,IGN:2,,,,heatpump_mode,s,UCH,0=OFF;1=Stand_by;2=Cooling;3=Heating;4=Heating_boost;5=Cooling_boost;6=Heating_rating;7=Cooling_rating;8=Antifreeze;9=Defrost;10=Overtemp_prot;11=Timeguard;12=System_error;13=Reset_service;14=Coolant_recovery;15=Soft_fail,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r,sensys,z1_heat_request,Z1 Heating Request,,fe,200f,0191,,s,BCD,0=off;1=on
+r,heatpump,heatpump_ext_unit_info,External Unit Info,,1e,2000,78106947,,s,IGN:1,,,,ext_temp,s,UIN,10,°C,,inverter_nominal_power,s,UIN,,,
+#last values unknown
+r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,IGN:1,,,,water_flow_temp,s,UIN,10,°C,,water_return_temp,s,UIN,10,°C,,unknown_temp,s,UIN,10,°C,,flame_power,s,UIN,10
+
