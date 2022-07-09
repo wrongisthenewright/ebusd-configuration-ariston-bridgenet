@@ -14,7 +14,7 @@ r,broadcast,ext_temp,External Temp,,fe,200f,7647,,s,UIN,10,°C
 r,boiler,boiler_pressure,Boiler circuit pressure,,3c,2000,7547,ign,s,IGN,,,,boiler_pressure,,UCH,10
 r,boiler,heating_temp_out,heating temperature,,3c,2000,6810,ign,s,IGN:1,,,,,,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,boiler,heating_temp_return,heating return temperature,,3c,2000,6910,ign,s,IGN:1,,,,,,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,boiler,flame_power,Flame Power,,3c,2000,c104,ign,s,IGN:1,,,,,,HEX,,,,,,,,,,,,,,,,,,,,,,,,
+r,boiler,flame_power,Flame Power,,3c,2000,c546,ign,s,IGN:1,,,,,,HEX,,,,,,,,,,,,,,,,,,,,,,,,
 r,boiler,diverter_cycles,Number of diverter valve cycles,,3c,2000,40d2,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
 r,boiler,ignition_cycles,Number of ignition cycles,,3c,2000,42d8,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
 r,boiler,circulation_time,circulation time,,3c,2000,44aF,ign,s,IGN:1,,,,,,UIN,,,,,,,,,,,,,,,,,,,,,,,,
@@ -194,12 +194,29 @@ r,heatpump,heatpump_4way_valve_state,Heatpump 4Way Valve State,,1e,2001,1345,,s,
 r,heatpump,heatpump_base_pane_heater_state,Heatpump Base Pane Heater State,,1e,2001,1645,,s,BCD,0=off;1=on
 #12.16 Menu - EM Diagnostics - 1 Input Menu
 r,hybrid,hybrid_status,Hybrid Status,,18,2000,c94b,,s,IGN:1,,,,,,UCH,0=Stand-By;1=Antifreeze Cycle;2=Heating Cycle;3=DHW Cycle;4=Thermal Cleanse Function;5=Air Purge function;6=Chimney Clean Function;7=Floor Drying Cycle;8=No Heat Generation;9=Manual Mode;10=Error;11=Initialization;12=Off;14=Cooling Cycle;15=DHW Antifreeze Cycle;16=Photovoltaic Integration;17=Dehumidification;18=Pump Down;19=Buffer Heating and DHW;20=Buffer Cooling and DHW
-r,hybrid,heatpump_heat_temp,CH Flow Set T only read (°C),,18,2000,6047,,s,IGN:1,,,,,,UIN,10,°C
+r,hybrid,heatpump_heat_temp,Heating Flow Setpoint Temp,,18,2000,6047,,s,IGN:1,,,,,,UIN,10,°C
 r,heatpump,heatpump_dhw_store_temp,DHW Storage Water Temp,,18,2000,7017,,s,IGN:1,,,,,,UIN,10,°C
 r,hybrid,heatpump_hv_inv_1,HV IN 1,,18,2000,1d11,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,hybrid,heatpump_hv_inv_2,HV IN 2,,18,2000,1c11,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,hybrid,heatpump_hv_inv_3,HV IN 3,,18,2000,1f11,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,hybrid,heatpump_aux1_input,AUX 1 Input State,,18,2000,1e11,,s,IGN:1,,,,,,BCD,0=off;1=on
+#12.17 Menu - EM Diagnostics - 2 Output Menu
+r,hybrid,heatpump_main_pump,HP Main Pump,,18,2000,c200,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,hybrid,heatpump_ext_pump,HP Ext Pump,,18,2000,c700,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,hybrid,boiler_3way_valve,Boiler 3Way valve,,18,2000,0601,,s,IGN:1,,,,,,BCD,0=dhw;1=heat
+r,hybrid,heatpump_3way_valve,HP 3Way valve,,18,2000,0701,,s,IGN:1,,,,,,BCD,0=heat;1=cool
+r,hybrid,heatpump_anode,HP Anode,,18,2000,1903,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,hybrid,heatpump_aux1_out,HP Aux1 Output,,18,2000,1803,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,hybrid,heatpump_aux2_out,HP Aux2 Output,,18,2000,1A03,,s,IGN:1,,,,,,BCD,0=off;1=on
+#19 Menu - Connectivity
+r,gateway,gateway_wifi,Gateway Wifi,,84,2000,0921,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,gateway,gateway_ntp,Gateway NTP,,84,2000,1421,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,gateway,gateway_wifi_state,Gateway Wifi,,84,2000,cc4b,,s,IGN:1,,,,,,UCH,0=off;1=initalizing;2=idle;3=ap_initializing;4=ap_mode;5=conecting;6=wifi_connected;7=cloud_init;8=cloud_connected;9=error
+r,gateway,gateway_wifi_signal,Gateway Wifi Signal Level,,84,2000,c3f0,,s,IGN:1,,,,,,UCH
+r,gateway,gateway_wifi_state,Gateway Wifi,,84,2000,c4f0,,s,IGN:1,,,,,,UCH,0=not_connected;1=not_activated;2=activated
+r,gateway,gateway_sw_update,Gateway SW Update,,84,2000,c89c,,s,IGN:1,,,,,,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
+
+
 #Other Undocumented Values
 #r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,7c4f,,s,IGN:1,,,,,,UIN,,W
 r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,63477c4f,,s,IGN:3,,,,,,UIN,,W
@@ -214,4 +231,6 @@ r,sensys,z1_heat_request,Z1 Heating Request,,fe,200f,0191,,s,BCD,0=off;1=on
 r,heatpump,heatpump_ext_unit_info,External Unit Info,,1e,2000,78106947,,s,IGN:1,,,,ext_temp,s,UIN,10,°C,,inverter_nominal_power,s,UIN,,,
 #last values unknown
 r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,IGN:1,,,,water_flow_temp,s,UIN,10,°C,,water_return_temp,s,UIN,10,°C,,unknown_temp,s,UIN,10,°C,,flame_power,s,UIN,10
-
+r,hybrid,hybrid_heat_temp,Heating Setpoint Temp,,fe,200f,6047,,s,UIN,10,°C
+#grabbing Cooling Setpoint (7071) broadcast from hybrid system
+r,hybrid,z1_hybrid_cool_temp,Z1 Cooling Setpoint Temp,,fe,2020,6a75,,s,IGN:12,,,,,s,UIN,10,°C
