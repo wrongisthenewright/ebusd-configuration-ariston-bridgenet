@@ -42,3 +42,24 @@ To have some metrics correctly shown in Home Assistant you nee to tweak mqtt-has
 All the working codes are the result of a fantastic job made by some user of the italian forum energeticambiente.it, many thanks Gruppo and friends!
 
 I've realized just now that some boiler codes came from https://github.com/komw/ariston-bus-bridgenet-ebusd, thank you Komw!
+
+
+
+P.S.
+for those interested here is a snip of my home assistant configuration.yaml regarding the template sensor to calculate COP/EER, metric names are derived from Ebusd/MQTT integration, if changed you shuld adapt the naming scheme...
+
+#add Ariston HP COP calculation
+sensor:
+  - platform: template
+    sensors:
+       instant_cop:
+               value_template: >-
+                 {% if (states('sensor.ebusd_heatpump_heatpump_flowmeter') | float (default=0)) > 0 %}
+                   {{ ([0,(((((states('sensor.ebusd_heatpump_water_flow_info_water_flow_temp') | float (default=0)) - (states('sensor.ebusd_heatpump_water_flow_info_water_return_temp') | float (default=0)) | abs) * (states('sensor.ebusd_heatpump_heatpump_flowmeter') | float (default=0)) * 60 * 1.16) / (states('sensor.ebusd_heatpump_heatpump_power_consumption') | float (default=0))) |abs |round(2)),10]|sort)[1] }}
+                 {% else %}
+                   nan
+                 {% endif %}  
+               unit_of_measurement: "COP"
+
+
+
