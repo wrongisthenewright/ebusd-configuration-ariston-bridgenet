@@ -30,19 +30,19 @@ r,boiler,heating_flame,Heating in progress,,3c,2001,0c19,heating_flame,s,IGN:1,,
 r,sensys,z1_room_temp,Z1 Room temperature,,fe,2020,7118,room_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z2_room_temp,Z2 Room temperature,,fe,2020,7218,room_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z3_room_temp,Z3 Room temperature,,fe,2020,7318,room_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z1_heat_setpoint_temp,Z1 Heat Setpoint temperature,,fe,200f,6996,z1_heat_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z2_heat_setpoint_temp,Z2 Heat Setpoint temperature,,fe,200f,6A96,z2_heat_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z3_heat_setpoint_temp,Z3 Heat Setpoint temperature,,fe,200f,6B96,z3_heat_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+#r,sensys,z1_heat_setpoint_temp,Z1 Heat Setpoint temperature,,fe,200f,6996,z1_heat_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+#r,sensys,z2_heat_setpoint_temp,Z2 Heat Setpoint temperature,,fe,200f,6A96,z2_heat_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+#r,sensys,z3_heat_setpoint_temp,Z3 Heat Setpoint temperature,,fe,200f,6B96,z3_heat_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z1_cool_setpoint_temp,Z1 Cool Setpoint temperature,,fe,200f,7071,z1_cool_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z2_cool_setpoint_temp,Z2 Cool Setpoint temperature,,fe,200f,7072,z2_cool_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z3_cool_setpoint_temp,Z3 Cool Setpoint temperature,,fe,200f,7073,z3_cool_setpoint_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z1_day_temp,Z1 Day temperature,,fe,200e,6271,z1_day_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z2_day_temp,Z2 Day temperature,,fe,200e,6272,z2_day_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,sensys,z3_day_temp,Z3 Day temperature,,fe,200e,6273,z3_day_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z1_night_temp,Z1 Day temperature,,fe,200e,6371,z1_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z2_night_temp,Z2 Day temperature,,fe,200e,6372,z2_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z3_night_temp,Z3 Day temperature,,fe,200e,6373,z3_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,antifreeze_temp,Z1 Antifreeze temperature,,fe,200e,6426,antifreeze_temp_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,sensys,z1_night_temp,Z1 Night temperature,,fe,200e,6371,z1_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,sensys,z2_night_temp,Z2 Night temperature,,fe,200e,6372,z2_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,sensys,z3_night_temp,Z3 Night temperature,,fe,200e,6373,z3_night_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,sensys,antifreeze_temp,Antifreeze temperature,,fe,200e,6426,antifreeze_temp_temp,s,UIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 #r,sensys,winter_mode,Winter Mode,,fe,200f,0120,,s,BCD,0=off;1=on
 r,sensys,auto_mode,Auto Mode,,fe,200f,0520,,s,BCD,0=off;1=on
 #r,sensys,summer_mode,Summer Mode,,fe,200f,0220,,s,BCD,0=off;1=on
@@ -227,10 +227,21 @@ r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,
 r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:7,,,,coolant_temp,s,UIN,10,°C
 r,heatpump,water_pump_info,Heatpump Water Pump Data,70,18,2000,c2000601,,s,IGN:1,,,,main_pump_status,s,BCD,0=off;1=on,,,heat_dhw_valve_mode,s,BCD,0=heating;1=dhw
 r,heatpump,heatpump_info,Heatpump Operating Mode,,18,2000,d140ca46,,s,IGN:2,,,,heatpump_mode,s,UCH,0=OFF;1=Stand_by;2=Cooling;3=Heating;4=Heating_boost;5=Cooling_boost;6=Heating_rating;7=Cooling_rating;8=Antifreeze;9=Defrost;10=Overtemp_prot;11=Timeguard;12=System_error;13=Reset_service;14=Coolant_recovery;15=Soft_fail,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-r,sensys,z1_heat_request,Z1 Heating Request,,fe,200f,0191,,s,BCD,0=off;1=on
-r,heatpump,heatpump_ext_unit_info,External Unit Info,,1e,2000,78106947,,s,IGN:1,,,,ext_temp,s,UIN,10,°C,,inverter_nominal_power,s,UIN,,,
+r,sensys,heat_request,Heating Request,13,fe,2010,0191,z1_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z2_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z3_heat_request,s,BCD,0=off;1=on
+r,heatpump,heatpump_ext_unit_info,External Unit Info,,1e,2000,78106947,,s,IGN:1,,,,ext_temp,s,UIN,10,°C,,inverter_nominal_power,s,UIN,,kW,
 #last values unknown
-r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,IGN:1,,,,water_flow_temp,s,UIN,10,°C,,water_return_temp,s,UIN,10,°C,,unknown_temp,s,UIN,10,°C,,flame_power,s,UIN,10
-r,hybrid,hybrid_heat_temp,Heating Setpoint Temp,,fe,200f,6047,,s,UIN,10,°C
+r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,IGN:1,,,,water_flow_temp,s,UIN,10,°C,,water_return_temp,s,UIN,10,°C,,unknown_temp,s,UIN,10,°C,,flame_efficiency,s,UIN,10
+r,hybrid,hybrid_setpoint_temp_bcast,Hybrid Setpoint Temp,,fe,200f,6047,,s,UIN,10,°C
 #grabbing Cooling Setpoint (7071) broadcast from hybrid system discarding some unknow values
 r,hybrid,z1_hybrid_cool_temp,Z1 Cooling Setpoint Temp,,fe,2020,6a75,,s,IGN:12,,,,,s,UIN,10,°C
+#grabbing Heating Parameters for various zones
+r,sensys,heat_temp_range,Heating Temp Range,13,fe,2020,0081,z1_heat_range,s,BCD,0=high;1=low,,,,s,IGN:2,,,,z2_heat_range,s,BCD,0=high;1=low,,,,s,IGN:2,,,,z3_heat_range,s,BCD,0=high;1=low
+r,sensys,heat_therm_type_selection,Heating Thermolregulation Type,37,fe,200f,c079,z1_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z2_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z3_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
+#r,sensys,heat_slope,Heating Slope,13,fe,2020,xxxxxxxxxx,z1_heat_slope,s,UCH,,,,,s,IGN:2,,,,z2_heat_slope,s,UCH,,,,,s,IGN:2,,,,z3_heat_slope,s,UCH
+r,sensys,z1_heat_offset,Z1 Heating Offset,13,fe,200e,6471,,s,D2B,10,°C
+r,sensys,z2_heat_offset,Z2 Heating Offset,13,fe,200e,6472,,s,UCH,10,°C
+r,sensys,z3_heat_offset,Z3 Heating Offset,13,fe,200e,6473,,s,SCH,10,°C
+r,sensys,heat_room_temp_influence,Heating Room Temp Influence,13,fe,2020,c07f01c279,z1_heat_room_temp_influence,s,UCH,,,,,s,IGN:2,,,,z2_heat_room_temp_influence,s,UCH,,,,,s,IGN:2,,,,z3_heat_room_temp_influence,s,UCH
+#To be searched during heating season 6071,6171 - 6072,6172 - 6073,6173 (min/max heating temp z1,2,3) missing from bus messages
+r,sensys,heat_request_mode,Heating Request Mode,13,fe,2020,cb7f00ce79,z1_heat_request_mode,s,BCD,0=standard;1=no_time_program;2=forced,,,,s,IGN:2,,,,z2_heat_request_mode,s,BCD,0=standard;1=no_time_program;2=forced,,,,s,IGN:2,,,,z3_heat_request_mode,s,BCD,0=standard;1=no_time_program;2=forced
+r,sensys,heat_setpoint_temp,Heating Setpoint Temp,13,fe,2010,6996,z1_heating_setpoint_temp,s,UIN,10,°C,,,s,IGN:3,,,,z2_heating_setpoint_temp,s,UIN,10,°C,,,s,IGN:3,,,,z3_heating_setpoint_temp,s,UIN,10,°C
