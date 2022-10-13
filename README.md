@@ -49,11 +49,9 @@ I've realized just now that some boiler codes came from https://github.com/komw/
 
 these 3 lines allow to change the operating mode of the system, thus activating dhw production, cooling and heating
 
-w,sensys,heating_status_w,Heating Status,,fe,2020,0120,,s,BCD
-
-w,sensys,dhw_status_w,Heatig Status,,fe,2020,0220,,s,BCD
-
-w,sensys,cooling_status_w,Cooling Status,,fe,2020,0f23,,s,BCD
+w,sensys,heating_status_w,Heating Status,,fe,2020,0120,,s,UIN
+w,sensys,dhw_status_w,Heatig Status,,fe,2020,0220,,s,UIN
+w,sensys,cooling_status_w,Cooling Status,,fe,2020,0f23,,s,UIN
 
 these lines need a bynary argument to set the desired setting 0=off 1=on, so writihng a "1" in the cooling_status_w command activate the cooling mode, all the other settings (temps, cooling mode ect.) must be set in advance.
 These command are useful if you integrate ebusd with MQTT, sending a MQTT command to these topics:
