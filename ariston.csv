@@ -75,6 +75,8 @@ r,sensys,ext_temp_offset,External Temp Correction,,18,2000,7426,,s,IGN:1,,,,,,SI
 r,sensys,protech_anode,ProTech Anode,,18,2000,0d23,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,sensys,pump_antiblock,Pump Antiblocking,,18,2000,1823,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,sensys,cooling_active,Cooling Enabled,,18,2000,1023,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,sensys,hybrid_mode,Hybrid Mode,,18,2000,c628,,s,IGN:1,,,,,,BCD,0=auto;1=boiler_only;2=hp_only
+r,sensys,hybrid_logic,Hybrid Logic,,18,2000,ce28,,s,IGN:1,,,,,,BCD,0=max_saving;1=max_eco
 
 
 
