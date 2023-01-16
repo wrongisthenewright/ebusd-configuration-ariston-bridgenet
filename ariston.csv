@@ -238,6 +238,16 @@ r,gateway,gateway_wifi_signal,Gateway Wifi Signal Level,,84,2000,c3f0,,s,IGN:1,,
 r,gateway,gateway_activation_state,Gateway Activation,,84,2000,c4f0,,s,IGN:1,,,,,,UCH,0=not_connected;1=not_activated;2=activated
 r,gateway,gateway_sw_update,Gateway SW Update,,84,2000,c89c,,s,IGN:1,,,,,,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
 
+#Menu - Hybrid System - Energy Tariffs - Read Commands
+r,sensys,gas_electric_min_cost_ratio,Hybrid minimum gas to electric cost ratio,,18,2001,cc28,,s,UCH,10
+r,sensys,gas_electric_max_cost_ratio,Hybrid maximum gas to electric cost ratio,,18,2001,cb28,,s,UCH,10
+r,sensys,gas_electric_energy_ratio,Hybrid gas vs electric energy ratio,,18,2001,682b,,s,UIN   
+r,sensys,gas_cost,Hybrid system gas cost €c-smc,,18,2001,642b,,s,UIN,10,c€
+r,sensys,electric_cost,Hybrid system electric cost €c-kwh,,18,2001,652b,,s,UIN,10,c€
+r,sensys,pv_electric_cost,Hybrid system PV electric cost €c-kwh,,18,2001,662b,,s,UIN,10,c€
+r,sensys,ext_boiler_heat_efficiency,Hybrid external boiler heating eff,,18,2001,782d,,s,UIN,10
+r,sensys,ext_boiler_dhw_efficiency,Hybrid external boiler DHW eff,,18,2001,762e,,s,UIN,10
+
 
 #Other Undocumented Values
 #r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,7c4f,,s,IGN:1,,,,,,UIN,,W
