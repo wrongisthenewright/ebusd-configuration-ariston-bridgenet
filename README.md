@@ -3,6 +3,8 @@ ebusd-configuration-ariston-bridgenet
 
 This repository contains a work in progress CSV configuration file for Ebusd (https://github.com/john30/ebusd)
 
+##I'm not a software developer, so I'm a noob on github, I can make mistake on publishing new releases etc.
+
 ## Requirements:
 - working installation of Ebusd
 - adapter to access bus data (see https://github.com/john30/ebusd/wiki/6.-Hardware)
