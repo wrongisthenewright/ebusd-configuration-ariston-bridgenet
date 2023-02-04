@@ -18,7 +18,7 @@ You need to configure Ebusd with the option requided for your environment (MQTT 
 As an adapter I use this: https://lectronz.com/products/ebus-to-wifi-adapter. 
 It's cheap, small and simple to use since it's powered directly by the bus, avoiding the necessity of external power adapter and being electrically isolated, I managed to wire it near the boiler/energy manager, but be careful: you need to balance some aspects, latency, wifi signal, number of device present on the bus line used are the primary ones.
 I struggled to set it up correctly, you need to find the correct polarity of the cables, since Bridgenet is 0-24v powered, so inverting the cables may be required. I started with the adapter near the remote interface (Sensys+Light GW) but the cable lenght from the energy manager and the devices already powered by that ebus port caused tension loss (I think), random bus reconfigurations and errors; I moved the adapter near the boiler where I connected the wires directy at the boiler ebus port,this solved the issue but can cause latency errors with the bus (Ebusd-->wifi-->Esp32-->bus-->esp32-->wifi-->Ebusd), I blindily increased the ebusd latency parameter to avoid most of the problems.
-The adapter I choose has a potentiometer that need to be carefully trimemd to your specific environment as explained in details here: https://github.com/john30/ebusd/wiki/6.-Hardware#adjusting-the-potentiometer.
+The adapter I choose has a potentiometer that need to be carefully trimemd to your specific environment as explained in details here:  https://github.com/danielkucera/esp8266-arduino-ebus
 
 I followed this procedure:
 1) set up Ebusd
@@ -26,8 +26,9 @@ I followed this procedure:
 3) remove power to the HVAC system
 4) connect the adapter
 5) restore power to the HVAC
-6) configure adapter wifi (the adapter create automatically an hot spot at first power on, connect to it and set up your wifi)
-7) Start Ebus in signal test mode (see link above on adjusting the potentiometer)
+6) configure adapter wifi (the adapter create automatically an hot spot at first power on, connect to it and set up your wifi), the device will reboot and join the wifi network
+6bis) find the adapter IP address (ping ebusd.local should do, if it does't work connect to you wifi AP/Router and search in the list of connected devices)
+7) Start Ebus in signal test mode (see here: https://github.com/john30/ebusd/wiki/6.-Hardware#adjusting-the-potentiometer)
 8) set the potentiometer setting
 9) loose a lot of time getting the correct setting
 10) loose another lot of time retrying :)
