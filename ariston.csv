@@ -29,8 +29,8 @@ w,broadcast,ebus_reset,Reset ebus,,fe,2034,,ebus_reset,m,IGN,,,,,,,,,,,,,,,,,,,,
 #Boiler direct ask
 r,boiler,boiler_pressure,Boiler circuit pressure,,3c,2000,7547,ign,s,IGN,,,,boiler_pressure,,UCH,10,bar
 #read by other broadcasted message
-#r,boiler,water_flow_temp,heating temperature,,3c,2000,6810,ign,s,IGN:1,,,,,,SIN,10,°C
-r,boiler,water_return_temp,heating return temperature,,3c,2000,6910,ign,s,IGN:1,,,,,,SIN,10,°C
+#r,boiler,LWT_temp,heating temperature,,3c,2000,6810,ign,s,IGN:1,,,,,,SIN,10,°C
+r,boiler,EWT_temp,heating return temperature,,3c,2000,6910,ign,s,IGN:1,,,,,,SIN,10,°C
 r,boiler,diverter_cycles,Number of diverter valve cycles,,3c,2000,40d2,ign,s,IGN:1,,,,,,UIN
 r,boiler,ignition_cycles,Number of ignition cycles,,3c,2000,42d8,ign,s,IGN:1,,,,,,UIN
 r,boiler,circulation_time,circulation time,,3c,2000,44aF,ign,s,IGN:1,,,,,,UIN,,min
@@ -47,13 +47,13 @@ r,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,s,UCH,1=standby;
 # Boiler related lines to detect bus casted messages
 # in these lines I'm using 2001 as PBSB to intercept messagse sent by the remote control unit to the energy manager
 # to do explicit read command you need to change it to 2000 as PBSB
-r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,boiler,heat_min_power_pct,Heating Bolier Min Power PCT,,3c,2000,6429,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,boiler,slow_ignition_power_pct,Slow Ignition Power PCT,,3c,2000,6529,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,boiler,heat_max_adj_power_pct,Heating Bolier Max Adjustable Power PCT,,3c,2000,6629,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,boiler,pump_max_pwm,Pump Max PWM,,3c,2000,c928,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,boiler,pump_min_pwm,Pump Min PWM,,3c,2000,ca28,ign,s,IGN:1,,,,,s,UCH,10,pct
+r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,heat_min_power_pct,Heating Bolier Min Power PCT,,3c,2000,6429,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,slow_ignition_power_pct,Slow Ignition Power PCT,,3c,2000,6529,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,heat_max_adj_power_pct,Heating Bolier Max Adjustable Power PCT,,3c,2000,6629,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,pump_max_pwm,Pump Max PWM,,3c,2000,c928,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,pump_min_pwm,Pump Min PWM,,3c,2000,ca28,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,pressure_monitoring_device,Pressure Monitoring Device,,3c,2000,c328,ign,s,IGN:1,,,,,s,UCH,0=temp_probe;1=pressure_switch;2=pressure_sensor
 r,boiler,warning_pressure,Water Warning Pressure,,3c,2000,c12a,ign,s,IGN:1,,,,,s,UCH,10,bar
 r,boiler,ignition_delay,Ignition Delay,,3c,2000,c027,ign,s,IGN:1,,,,,s,UCH,,min
@@ -126,7 +126,7 @@ r,energymgr,z1_summer_winter_temp_thresh,Z1 Summer Winter Threshold Temp,,18,200
 r,energymgr,z1_summer_winter_switch_delay_time,Z1 Summer Winter Switch Delay Time,,18,2000,7A71,,s,IGN:1,,,,,,UIN,,min
 
 #Z1 Heating Settings
-r,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,18,2000,0081,,s,IGN:1,,,,,,BCD,0=high;1=low
+r,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,18,2000,0081,,s,IGN:1,,,,,,BCD,0=low;1=high
 w,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,fe,2020,0081,,s,BCD
 r,energymgr,z1_heat_therm_type_selection,Z1 Heating Thermoreg Type Selection,,18,2000,C079,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
 w,energymgr,z1_heat_therm_type_selection,Z1 Heating Thermoreg Type Selection,,fe,2020,C079,,s,BCD,
@@ -170,7 +170,7 @@ r,energymgr,z2_summer_winter_auto_switch,Z2 Summer Winter Auto Switch,,18,2000,0
 r,energymgr,z2_summer_winter_temp_thresh,Z2 Summer Winter Threshold Temp,,18,2000,7972,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_summer_winter_switch_delay_time,Z2 Summer Winter Switch Delay Time,,18,2000,7A72,,s,IGN:1,,,,,,UIN,,min
 #Z2 Heating Settings
-r,energymgr,z2_heat_temp_range,Z2 Heating Temp Range,,18,2000,0082,,s,IGN:1,,,,,,BCD,0=high;1=low
+r,energymgr,z2_heat_temp_range,Z2 Heating Temp Range,,18,2000,0082,,s,IGN:1,,,,,,BCD,0=low;1=high
 r,energymgr,z2_heat_therm_type_selection,Z2 Heating Thermoreg Type Selection,,18,2000,c07a,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
 r,energymgr,z2_heat_slope,Z2 Heat Thermoreg Slope,,18,2000,6a72,,s,IGN:1,,,,,,UIN,100
 #r,energymgr,z2_heat_offset,Z2 Heat Thermoreg Offset,,18,2000,6472,,s,IGN:1,,,,,,SCH,10
@@ -201,7 +201,7 @@ r,energymgr,z3_summer_winter_auto_switch,Z3 Summer Winter Auto Switch,,18,2000,0
 r,energymgr,z3_summer_winter_temp_thresh,Z3 Summer Winter Threshold Temp,,18,2000,7973,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_summer_winter_switch_delay_time,Z3 Summer Winter Switch Delay Time,,18,2000,7A73,,s,IGN:1,,,,,,UIN,,min
 #Z3 Heating Settings
-r,energymgr,z3_heat_temp_range,Z3 Heating Temp Range,,18,2000,0083,,s,IGN:1,,,,,,BCD,0=high;1=low
+r,energymgr,z3_heat_temp_range,Z3 Heating Temp Range,,18,2000,0083,,s,IGN:1,,,,,,BCD,0=low;1=high
 r,energymgr,z3_heat_therm_type_selection,Z3 Heating Thermoreg Type Selection,,18,2000,c07b,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
 r,energymgr,z3_heat_slope,Z3 Heat Thermoreg Slope,,18,2000,6a73,,s,IGN:1,,,,,,UIN,100
 #r,energymgr,z3_heat_offset,Z3 Heat Thermoreg Offset,,18,2000,6473,,s,IGN:1,,,,,,SCH,10
@@ -234,7 +234,7 @@ w,energymgr,electric_cost,Hybrid system electric cost €c-kwh,,fe,2020,652b,,s,
 r,energymgr,pv_electric_cost,Hybrid system PV electric cost €c-kwh,,18,2000,662b,,s,IGN:1,,,,,,UIN,10,c€
 w,energymgr,pv_electric_cost,Hybrid system PV electric cost €c-kwh,,fe,2020,662b,,s,UIN,10,c€
 r,energymgr,ext_boiler_heat_efficiency,Hybrid external boiler heating eff,,18,2000,782d,,s,IGN:1,,,,,,UIN,10
-r,energymgr,ext_boiler_dhw_efficiency,Hybrid external boiler DHW eff,,18,2000,762e,,s,UIN,10
+r,energymgr,ext_boiler_dhw_efficiency,Hybrid external boiler DHW eff,,18,2000,762e,,s,IGN:1,,,,,,UIN,10
 
 #Broadcasted messages and grab of transmitted messages.
 r,energymgr,ext_temp,External Temp,,fe,200f,7647,,s,SIN,10,°C
@@ -304,8 +304,8 @@ r,heatpump,pump_operation,Pump Operation,,18,2000,c32a,ign,s,IGN:1,,,,,s,UCH,0=l
 
 #Menu - HP Diagnostic 1 Menu
 r,heatpump,heatpump_ext_temp,External Temp,,18,2000,7810,,s,IGN:1,,,,,,SIN,10,°C
-r,heatpump,heatpump_water_flow_temp,Heatpump Waterflow T emp,,18,2000,7610,,s,IGN:1,,,,,,SIN,10,°C
-r,heatpump,heatpump_water_return_temp,Heatpump Water Return Temp,,18,2000,7710,,s,IGN:1,,,,,,SIN,10,°C
+r,heatpump,heatpump_LWT_temp,Heatpump Waterflow T emp,,18,2000,7610,,s,IGN:1,,,,,,SIN,10,°C
+r,heatpump,heatpump_EWT_temp,Heatpump Water Return Temp,,18,2000,7710,,s,IGN:1,,,,,,SIN,10,°C
 r,heatpump,heatpump_evaporator_temp,Heatpump Evaporator Temp,,18,2000,7910,,s,IGN:1,,,,,,SIN,10,°C
 r,heatpump,heatpump_suction_temp,Heatpump Suction Temp,,18,2000,7217,,s,IGN:1,,,,,,SIN,10,°C
 r,heatpump,heatpump_comp_discharge_temp,Heatpump Compr Discharge Temp,,18,2000,7317,,s,IGN:1,,,,,,SIN,10,°C
@@ -340,7 +340,7 @@ r,heatpump,heatpump_4way_valve_state,Heatpump 4Way Valve State,,1e,2000,1345,,s,
 r,heatpump,heatpump_base_pane_heater_state,Heatpump Base Pane Heater State,,1e,2000,1645,,s,BCD,0=off;1=on
 
 #Menu - EM Diagnostics - 1 Input Menu
-r,energymgr,hybrid_status,Hybrid Status,,18,2000,c94b,,s,IGN:1,,,,,,UCH,0=Stand-By;1=Antifreeze Cycle;2=Heating Cycle;3=DHW Cycle;4=Thermal Cleanse Function;5=Air Purge function;6=Chimney Clean Function;7=Floor Drying Cycle;8=No Heat Generation;9=Manual Mode;10=Error;11=Initialization;12=Off;14=Cooling Cycle;15=DHW Antifreeze Cycle;16=Photovoltaic Integration;17=Dehumidification;18=Pump Down;19=Buffer Heating and DHW;20=Buffer Cooling and DHW
+r,energymgr,hybrid_status,Hybrid Status,,18,2000,c94b,,s,IGN:1,,,,,,UCH,0=Stand-By;1=Antifreeze Cycle;2=Heating Cycle;3=DHW Cycle;4=Thermal Cleanse Function;5=Air Purge function;6=Chimney Clean Function;7=Floor Drying Cycle;8=No Heat Generation;9=Manual Mode;10=Error/Manual Mode;11=Initialization;12=Off;14=Cooling Cycle;15=DHW Antifreeze Cycle;16=Photovoltaic Integration;17=Dehumidification;18=Pump Down;19=Buffer Heating and DHW;20=Buffer Cooling and DHW
 r,energymgr,LWT_target_temp,Water Flow Current Setpoint Temp,,18,2000,6047,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,dhw_store_temp,DHW Storage Water Temp,,18,2000,7017,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,energymgr_hv_inv_1_status,HV IN 1,,18,2000,1d11,,s,IGN:1,,,,,,BCD,0=off;1=on
@@ -350,15 +350,15 @@ r,energymgr,energymgr_aux1_input,AUX 1 Input State,,18,2000,1e11,,s,IGN:1,,,,,,B
 #Menu - EM Diagnostics - 2 Output Menu
 r,heatpump,heatpump_main_pump,HP Main Pump,,18,2000,c200,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,heatpump,heatpump_ext_pump,HP Ext Pump,,18,2000,c700,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,boiler_3way_valve,Boiler 3Way valve,,,2000,0601,,s,IGN:1,,,,,,BCD,0=dhw;1=heat
-r,heatpump,heatpump_3way_valve,HP 3Way valve,,18,2000,0701,,s,IGN:1,,,,,,BCD,0=heat;1=cool
+r,heatpump,heatpump_3way_valve_dhw_heat,HP 3Way valve,,18,2000,0601,,s,IGN:1,,,,,,BCD,0=dhw;1=heat
+r,heatpump,heatpump_3way_valve_heat_cool,HP 3Way valve,,18,2000,0701,,s,IGN:1,,,,,,BCD,0=heat;1=cool
 r,heatpump,heatpump_anode,HP Anode,,18,2000,1903,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,energymgr,energymgr_aux1_out,HP Aux1 Output,,18,2000,1803,,s,IGN:1,,,,,,BCD,0=off;1=on
 r,energymgr,energymgr_aux2_out,HP Aux2 Output,,18,2000,1A03,,s,IGN:1,,,,,,BCD,0=off;1=on
 
-#Manu - PWM
-r,heatpump,pump_max_pwm,HP Pump Max PWM,,18,2000,c928,ign,s,IGN:1,,,,,s,UCH,10,pct
-r,heatpump,pump_min_pwm,HP Pump Min PWM,,18,2000,ca28,ign,s,IGN:1,,,,,s,UCH,10,pct
+#Menu - PWM
+r,heatpump,pump_max_pwm,HP Pump Max PWM,,1e,2001,d32c,ign,s,UCH,,pct
+r,heatpump,pump_min_pwm,HP Pump Min PWM,,1e,2001,d22c,ign,s,UCH,,pct
 
 
 #Other Undocumented Values
@@ -368,8 +368,8 @@ r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,63477c
 #Broadcasted messages and grab of transmitted messages.
 
 r,heatpump,compressor_info,Heatpump Compressor Data,7f,1e,2000,cb4673177217,,s,IGN:1,,,,compressor_frequency,s,UCH,,Hz,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
-r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,,s,IGN:1,,,,water_flow_temp,s,SIN,10,°C,,water_return_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,flow_meter,s,UIN,10,L
-r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:7,,,,coolant_temp,s,SIN,10,°C
+#r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,flow_meter,s,UIN,10,L
+r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,coolant_temp,s,SIN,10,°C
 r,heatpump,water_pump_info,Heatpump Water Pump Data,70,18,2000,c2000601,,s,IGN:1,,,,main_pump_status,s,BCD,0=off;1=on,,,heat_dhw_valve_mode,s,BCD,0=heating;1=dhw
 r,heatpump,heatpump_info,Heatpump Operating Mode,,18,2000,d140ca46,,s,IGN:2,,,,heatpump_mode,s,UCH,0=OFF;1=Stand_by;2=Cooling;3=Heating;4=Heating_boost;5=Cooling_boost;6=Heating_rating;7=Cooling_rating;8=Antifreeze;9=Defrost;10=Overtemp_prot;11=Timeguard;12=System_error;13=Reset_service;14=Coolant_recovery;15=Soft_fail,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 r,heatpump,heatpump_ext_unit_info,External Unit Info,,1e,2000,78106947,,s,IGN:1,,,,ext_temp,s,SIN,10,°C,,inverter_nominal_power,s,UIN,,kW,
@@ -399,7 +399,7 @@ r,gateway,gateway_info1,Gateway info 1,,84,2000,d140cc4bc89ccc9a,config_changes,
 
 
 #last values unknown
-r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,IGN:1,,,,water_flow_temp,s,SIN,10,°C,,water_return_temp,s,SIN,10,°C,,unknown_temp,s,SIN,10,°C,,flame_efficiency,s,UIN,10,pct
+r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,unknown_temp,s,SIN,10,°C,,flame_efficiency,s,UIN,10,pct
 
 #grabbing Heating Parameters for various zones
 #r,energymgr,heat_room_temp_influence,Heating Room Temp Influence,,,2020,c07f01c279,z1_heat_room_temp_influence,s,UCH,,,,,s,IGN:2,,,,z2_heat_room_temp_influence,s,UCH,,,,,s,IGN:2,,,,z3_heat_room_temp_influence,s,UCH
@@ -421,6 +421,6 @@ r,heatpump,config_version_counter,System Configuration Change Counter,,18,2000,d
 r,boiler,config_changes,System Configuration Change Counter,,3c	,2000,d140,ign,s,IGN:1,,,,,,UCH,,,,,,,,,,,,,,,,,,,,,,,,
 
 #Support for ELCO Aerotop Split specific message codes
-r,heatpump,elco_hp_water_flow_temp,Heating Water Flow Temp,,18,2000,6310,,s,IGN:1,,,,,,SIN,10,°C
-r,heatpump,elco_hp_water_return_temp,Heating Water Return Temp,,18,2000,6610,,s,IGN:1,,,,,,SIN,10,°C
-r,heatpump,elco_hp_return_temp,,,fe,2010,759e,,s,IGN:5,,,,elco_hp_return_temp,s,S3N,10,°C
+#r,heatpump,elco_hp_LWT_temp,Heating Water Flow Temp,,18,2000,6310,,s,IGN:1,,,,,,SIN,10,°C
+#r,heatpump,elco_hp_EWT_temp,Heating Water Return Temp,,18,2000,6610,,s,IGN:1,,,,,,SIN,10,°C
+#r,heatpump,elco_hp_return_temp,,,fe,2010,759e,,s,IGN:5,,,,elco_hp_return_temp,s,S3N,10,°C
