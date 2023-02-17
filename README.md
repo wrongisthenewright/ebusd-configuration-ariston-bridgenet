@@ -27,15 +27,15 @@ I followed this procedure:
 4) connect the adapter
 5) restore power to the HVAC
 6) configure adapter wifi (the adapter create automatically an hot spot at first power on, connect to it and set up your wifi), the device will reboot and join the wifi network
-6bis) find the adapter IP address (ping ebusd.local should do, if it does't work connect to you wifi AP/Router and search in the list of connected devices)
-7) Start Ebus in signal test mode (see here: https://github.com/john30/ebusd/wiki/6.-Hardware#adjusting-the-potentiometer)
-8) set the potentiometer setting
-9) loose a lot of time getting the correct setting
-10) loose another lot of time retrying :)
-11) once happy with the potentiometer configuration, stop ebusd
-12) copy ariston.csv on the ebusd config folder
-13) start ebusd with standard settings
-14) knock on wood/cross your fingers
+7) find the adapter IP address (ping ebusd.local should do, if it does't work connect to you wifi AP/Router and search in the list of connected devices)
+8) Start Ebus in signal test mode (see here: https://github.com/john30/ebusd/wiki/6.-Hardware#adjusting-the-potentiometer)
+9) set the potentiometer setting
+10) loose a lot of time getting the correct setting
+11) loose another lot of time retrying :)
+12) once happy with the potentiometer configuration, stop ebusd
+13) copy ariston.csv on the ebusd config folder
+14) start ebusd with standard settings
+15) knock on wood/cross your fingers
 
 Since Bridgenet uses PBSB specific command to read and write the data the configuration as of now is configured only for read operations, albeit with many direct ask instructions.
 Many if not all the data are broadcasted on rebular basis on the bus by the various device connected, It should be possible to get the same values simply sniffing the traffic, ATM I just set polling request for the most useful ones (to me).
