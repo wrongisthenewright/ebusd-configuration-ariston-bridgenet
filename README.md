@@ -71,6 +71,16 @@ with 0 or 1 will activate/deactivate the desired feature.
 
 **BEWARE:** I have not seriously tested these commands, I've been able to do only preliminary checks but the settings change are detected by the HVAC systems and are reflected on the thermostat (sensys for Ariston brand) and on the remote thermo website so the system is indeed configured in the desired mode.
 
+**NOTE FOR HOME ASSISTANT INTEGRATION:** All writing rules added to the CSV (the one above and the ones related to the most frequently modified parameters), are unavailable in HA until you edit the mqtt-hassio.cfg line related to filtering the data direction:
+
+the line:
+`filter-direction = r|u`
+
+should be modified as follow:
+
+`filter-direction = r|u|^w`
+
+
 
 
 
