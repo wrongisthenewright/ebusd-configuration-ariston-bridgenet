@@ -13,7 +13,7 @@ This repository contains a work in progress CSV configuration file for Ebusd (ht
 For Ebusd I personally use Docker since I already have other applications running on it, it's been simpler to setup. 
 You need to configure Ebusd with the option requided for your environment (MQTT parameters, adapter details fitting your device). You can find the run script I use in the script folder, it's specific for my installation, if you plan to use it you need to adapt it's settings.
 
-**BEWARE:**  connecting external device to your heating system may void warranty and cause malfunctions, the HVAC system runs with power grid voltages, be really,really, really carefull!
+**BEWARE:**  connecting external device to your heating system may void warranty and cause malfunctions, the HVAC system runs with power grid voltages, be really,really, really carefull! Also consider that adding custom circuit to your system may void your warranty, be aware of this issue and use my configuration and advices at your own risk.
 
 As an adapter I use this: https://lectronz.com/products/ebus-to-wifi-adapter. 
 It's cheap, small and simple to use since it's powered directly by the bus, avoiding the necessity of external power adapter and being electrically isolated, I managed to wire it near the boiler/energy manager, but be careful: you need to balance some aspects, latency, wifi signal, number of device present on the bus line used are the primary ones.
@@ -80,6 +80,7 @@ should be modified as follow:
 
 `filter-direction = r|u|^w`
 
+I've added a peliminary version of my mqtt-hassio.cfg that has the write filter removed and with the slope, offset and status rules to alter those parameters from HA ( AGAIN: my testing is only preliminaty, use it at your own risk )
 
 
 
