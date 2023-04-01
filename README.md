@@ -17,7 +17,7 @@ You need to configure Ebusd with the option requided for your environment (MQTT 
 
 As an adapter I use this: https://lectronz.com/products/ebus-to-wifi-adapter. 
 It's cheap, small and simple to use since it's powered directly by the bus, avoiding the necessity of external power adapter and being electrically isolated, I managed to wire it near the boiler/energy manager, but be careful: you need to balance some aspects, latency, wifi signal, number of device present on the bus line used are the primary ones.
-I struggled to set it up correctly, you need to find the correct polarity of the cables, since Bridgenet is 0-24v powered, so inverting the cables may be required. I started with the adapter near the remote interface (Sensys+Light GW) but the cable lenght from the energy manager and the devices already powered by that ebus port caused tension loss (I think), random bus reconfigurations and errors; I moved the adapter near the boiler where I connected the wires directy at the boiler ebus port,this solved the issue but can cause latency errors with the bus (Ebusd-->wifi-->Esp32-->bus-->esp32-->wifi-->Ebusd), I blindily increased the ebusd latency parameter to avoid most of the problems.
+I struggled to set it up correctly, you need to find the correct polarity of the cables, since Bridgenet is 0-24v powered, so inverting the cables may be required. I started with the adapter near the remote interface (Sensys+Light GW) but the cable lenght from the energy manager and the devices already powered by that ebus port caused tension loss (I think), random bus reconfigurations and errors; I moved the adapter near the boiler where I connected the wires directy at the boiler ebus port,this solved the issue but can cause latency errors with the bus (Ebusd-->wifi-->Esp32-->bus-->esp32-->wifi-->Ebusd), I blindily increased the ebusd latency parameter and added reading and writing retries to avoid most of the problems.
 The adapter I choose has a potentiometer that need to be carefully trimemd to your specific environment as explained in details here:  https://github.com/danielkucera/esp8266-arduino-ebus
 
 I followed this procedure:
@@ -38,28 +38,29 @@ I followed this procedure:
 15) knock on wood/cross your fingers
 
 Since Bridgenet uses PBSB specific command to read and write the data the configuration as of now is configured only for read operations, albeit with many direct ask instructions.
-Many if not all the data are broadcasted on rebular basis on the bus by the various device connected, It should be possible to get the same values simply sniffing the traffic, ATM I just set polling request for the most useful ones (to me).
-
-To have some metrics correctly shown in Home Assistant you nee to tweak mqtt-hassio.cfg to remove some filter.
-
-All the working codes are the result of a fantastic job made by some user of the italian forum energeticambiente.it, many thanks Gruppo and friends!
-
-I've realized just now that some boiler codes came from https://github.com/komw/ariston-bus-bridgenet-ebusd, thank you Komw!
+Many if not all the data are broadcasted on regular basis on the bus by the various device connected, It should be possible to get the same values simply sniffing the traffic, ATM I read from broadcasted messages most of the common parameters and set a cron script to read the parameters not broadcasted but interesting to my use case (see read_custom.sh script, it's a quick and dirty solution but it serves my needs).
 
 
 
-## Added Writing lines to activate/deactivate specific functions (change operating mode)
+## Added Writing lines to change system parameters
 
-these 3 lines allow to change the operating mode of the system, thus activating dhw production, cooling and heating
+In the CSV tere are now many lines enabling the writing of system patameters/settings. ATM I've added the ones more interesting in my use case, thus permitting to:
+- enable/disable operating modes (Cooling, Heating, DHW, Climatic Thermoregulation) 
+- change Z1 Day, Night temp
+- change Z1 climatic thermoregulation parametes (slope, offset, room temp infl., LWTmin, LWTmax)
+- change Hybrid sysytem energy costs (gas/electric)
+
+The CSV lines for those parameters are now primarily coded for Home Assistant integration via MQTT but with some simple thinkering should be possible to adapt it to other domotic applications.
+
+Eg. these 3 lines allow to change the operating mode of the system, thus activating dhw production, cooling and heating
 
 ```
-w,sensys,heating_status_w,Heating Status,,fe,2020,0120,,s,UIN
-w,sensys,dhw_status_w,Heatig Status,,fe,2020,0220,,s,UIN
-w,sensys,cooling_status_w,Cooling Status,,fe,2020,0f23,,s,UIN
+w,sensys,heating_status_w,Heating Status,,fe,2020,0120,,s,onoff
+w,sensys,dhw_status_w,Heatig Status,,fe,2020,0220,,s,onoff
+w,sensys,cooling_status_w,Cooling Status,,fe,2020,0f23,,s,onoff
 ```
 
-these lines need a bynary argument to set the desired setting 0=off 1=on, so writihng a "1" in the cooling_status_w command activate the cooling mode, all the other settings (temps, cooling mode ect.) must be set in advance.
-These command are useful if you integrate ebusd with MQTT, sending a MQTT command to these topics:
+these need a string argument to set the desired setting "off" or "on", so writing an "on" in the cooling_status_w command activate the cooling mode, all the other settings (temps, cooling logic etc.) must be set in advance. You could also change these params integrating ebusd with MQTT and sending a MQTT message to these topics:
 
 ```
 ebusd/sensys/heating_status_w/set
@@ -67,10 +68,10 @@ ebusd/sensys/dhw_status_w/set
 ebusd/sensys/cooling_status_w/set
 ```
 
-with 0 or 1 will activate/deactivate the desired feature.
+with "on" or "off" will activate/deactivate the desired feature.
 
-**BEWARE:** I have not seriously tested these commands, I've been able to do only preliminary checks but the settings change are detected by the HVAC systems and are reflected on the thermostat (sensys for Ariston brand) and on the remote thermo website so the system is indeed configured in the desired mode.
-
+**BEWARE:** I have tested these changes only with my system, use it at your own risk. I've had no error and the settings change are detected by the HVAC systems and are reflected on the thermostat (sensys for Ariston brand) and on the remote thermo website so the system is accepting these commands. Pay attention on the firsts uses to ebusd logs for arbitration loss or other errors, adding some latency and retry parameters to ebusd command line/docker run chould mitigate/solve the problem. 
+ 
 **NOTE FOR HOME ASSISTANT INTEGRATION:** All writing rules added to the CSV (the one above and the ones related to the most frequently modified parameters), are unavailable in HA until you edit the mqtt-hassio.cfg line related to filtering the data direction:
 
 the line:
@@ -80,8 +81,15 @@ should be modified as follow:
 
 `filter-direction = r|u|^w`
 
-I've added a peliminary version of my mqtt-hassio.cfg that has the write filter removed and with the slope, offset and status rules to alter those parameters from HA ( AGAIN: my testing is only preliminaty, use it at your own risk )
+I've added version of my mqtt-hassio.cfg file, that has the write filter removed and with other minor changes to map correctly ebusd data in HA
 
 
+## Credits
+
+All the working codes are the result of a fantastic job made by some user of the italian forum energeticambiente.it, many thanks Gruppo and friends!
+
+Some boiler codes came from https://github.com/komw/ariston-bus-bridgenet-ebusd.
+
+The writing rules are inspired by ysard repo https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet
 
 
