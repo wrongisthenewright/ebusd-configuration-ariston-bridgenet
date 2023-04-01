@@ -38,7 +38,7 @@ r,boiler,boiler_life_time,Boiler Life Time,,3c,2000,50d9,ign,s,IGN:1,,,,,,UIN,,m
 r,boiler,boiler_circulation_cycles,Number of circulation cycles,,3c,2000,44d2,ign,s,IGN:1,,,,,,UIN
 r,boiler,boiler_fan_cycles,Number of fan cycles,,3c,2000,4CD2,ign,s,IGN:1,,,,,,UIN
 r,boiler,hours_burner_on,Hours Burner On,,3c,2000,4bd1,ign,s,IGN:1,,,,,,UIN,,hours
-r,boiler,flame_active,Flame active,,3c,2000,0e11,ign,s,IGN:1,,,,,,BCD,1=on;0=off
+r,boiler,flame_active,Flame active,,3c,2000,0e11,ign,s,IGN:1,,,,,s,onoff
 r,boiler,flame_power,Flame Power 0-255,,3c,2000,6847,,s,IGN:1,,,,,,UIN
 
 #Boiler Broadcasted messages
@@ -52,8 +52,8 @@ r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN
 r,boiler,heat_min_power_pct,Heating Bolier Min Power PCT,,3c,2000,6429,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,slow_ignition_power_pct,Slow Ignition Power PCT,,3c,2000,6529,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,heat_max_adj_power_pct,Heating Bolier Max Adjustable Power PCT,,3c,2000,6629,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,pump_max_pwm,Pump Max PWM,,3c,2000,c928,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,pump_min_pwm,Pump Min PWM,,3c,2000,ca28,ign,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,pump_max_pwm,Pump Max PWM,,3c,2000,c928,,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,pump_min_pwm,Pump Min PWM,,3c,2000,ca28,,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,pressure_monitoring_device,Pressure Monitoring Device,,3c,2000,c328,ign,s,IGN:1,,,,,s,UCH,0=temp_probe;1=pressure_switch;2=pressure_sensor
 r,boiler,warning_pressure,Water Warning Pressure,,3c,2000,c12a,ign,s,IGN:1,,,,,s,UCH,10,bar
 r,boiler,ignition_delay,Ignition Delay,,3c,2000,c027,ign,s,IGN:1,,,,,s,UCH,,min
@@ -90,17 +90,17 @@ r,energymgr,hydraulic_scheme,Hydraulic Scheme,,18,2000,dc28,,s,IGN:1,,,,,,BCD,0=
 #Temp Est. x Disabilitazione Caldaia
 #Temp Est. x Disabilitazione PDC
 r,energymgr,heating_mode,Heating Mode,,18,2000,c728,,s,IGN:1,,,,,,BCD,0=eco;1=eco_plus;2=average;3=comfort;4=comfort_plus
-r,heatpump,heat_ext_temp_offset,HP Heating LWT Temp Correction,,18,2000,7d2b,,s,IGN:1,,,,,,SIN,10,°C
+r,heatpump,heat_ext_temp_offset,HP Heating Ext Temp Correction,,18,2000,7d2b,,s,IGN:1,,,,,,SIN,10,°C
 r,heatpump,boost_time,HP boost time,,18,2000,602b,,s,IGN:1,,,,,,MIN,,min
 r,energymgr,ext_temp_offset,External Temp Correction,,18,2000,7426,,s,IGN:1,,,,,,SIN,10,°C
-r,energymgr,protech_anode,ProTech Anode,,18,2000,0d23,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,pump_antiblock,Pump Antiblocking,,18,2000,1823,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,protech_anode,ProTech Anode,,18,2000,0d23,,s,IGN:1,,,,,s,onoff
+r,energymgr,pump_antiblock,Pump Antiblocking,,18,2000,1823,,s,IGN:1,,,,,s,onoff
 
 
 #Energy Manager - Cooling
-r,energymgr,cooling_active,Cooling Enabled,,18,2000,1023,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,cooling_available,Cooling Enabled,,18,2000,1023,,s,IGN:1,,,,,s,onoff
 r,energymgr,cool_anticycle_time,HP Cooling Anticycle Delay,,18,2000,d927,,s,IGN:1,,,,,,UCH,,min
-r,heatpump,cool_ext_temp_offset,HP Cooling LWT Temp Correction,,18,2000,7f2b,,s,IGN:1,,,,,,SIN,10,°C
+r,heatpump,cool_ext_temp_offset,HP Cooling Ext Temp Correction,,18,2000,7f2b,,s,IGN:1,,,,,,SIN,10,°C
 
 r,energymgr,hybrid_mode,Hybrid Mode,,18,2000,c628,,s,IGN:1,,,,,,BCD,0=auto;1=boiler_only;2=hp_only
 w,energymgr,hybrid_mode,Hybrid Mode,,fe,2020,c628,,s,BCD
@@ -117,11 +117,11 @@ w,energymgr,z1_day_temp,,,fe,2020,6271,,s,SIN,10,°C
 r,energymgr,z1_night_temp,Z1 Night Temp,,18,2000,6371,,s,IGN:1,,,,,,SIN,10,°C
 w,energymgr,z1_night_temp,,,fe,2020,6371,,s,SIN,10,°C
 r,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,18,2000,6571,,s,IGN:1,,,,,,SIN,10,°C
-w,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,fe,2020,6571,,s,SIN,10,°C
+#w,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,fe,2020,6571,,s,SIN,10,°C
 r,energymgr,antifreeze_temp,Antifreeze Temp,,18,2000,6426,,s,IGN:1,,,,,,SIN,10,°C
 
 #Z1 Summer Winter Changeover
-r,energymgr,z1_summer_winter_auto_switch,Z1 Summer Winter Auto Switch,,18,2000,0781,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,z1_summer_winter_auto_switch,Z1 Summer Winter Auto Switch,,18,2000,0781,,s,IGN:1,,,,,s,onoff
 r,energymgr,z1_summer_winter_temp_thresh,Z1 Summer Winter Threshold Temp,,18,2000,7971,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z1_summer_winter_switch_delay_time,Z1 Summer Winter Switch Delay Time,,18,2000,7A71,,s,IGN:1,,,,,,UIN,,min
 
@@ -146,7 +146,7 @@ w,energymgr,z1_heat_request_mode,Z1 Heating Request Mode,,fe,2020,ce79,,s,BCD
 #Z1 Diagnostic
 r,energymgr,z1_room_temp,Z1 Room Temp,,18,2000,7118,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z1_heat_setpoint_temp_check,Z1 Heating Check Temp,,18,2000,6996,,s,IGN:1,,,,,,SIN,10,°C
-r,energymgr,z1_heat_request,Z1 Heating Request,,18,2000,0191,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,z1_heat_request,Z1 Heating Request,,18,2000,0191,,s,IGN:1,,,,,s,onoff
 #Z1 Cooling Settings
 r,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,18,2000,7071,,s,IGN:1,,,,,,SIN,10,°C
 w,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,fe,2020,7071,,s,SIN,10,°C
@@ -166,7 +166,7 @@ r,energymgr,z2_day_temp,Z2 Day Temp,,18,2000,6272,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_night_temp,Z2 Night Temp,,18,2000,6372,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_heat_setpoint_temp_set,Z2 Heat Set Temp,,18,2000,6572,,s,IGN:1,,,,,,SIN,10,°C
 #Z2 Summer Winter Changeover
-r,energymgr,z2_summer_winter_auto_switch,Z2 Summer Winter Auto Switch,,18,2000,0782,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,z2_summer_winter_auto_switch,Z2 Summer Winter Auto Switch,,18,2000,0782,,s,IGN:1,,,,,s,onoff
 r,energymgr,z2_summer_winter_temp_thresh,Z2 Summer Winter Threshold Temp,,18,2000,7972,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_summer_winter_switch_delay_time,Z2 Summer Winter Switch Delay Time,,18,2000,7A72,,s,IGN:1,,,,,,UIN,,min
 #Z2 Heating Settings
@@ -181,7 +181,7 @@ r,energymgr,z2_heat_request_mode,Z2 Heating Request Mode,,18,2000,ce7a,,s,IGN:1,
 #Z2 Diagnostic
 r,energymgr,z2_room_temp,Z2 Room Temp,,18,2000,7218,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_heat_setpoint_temp_check,Z2 Heating Check Temp,,18,2000,6a96,,s,IGN:1,,,,,,SIN,10,°C
-r,energymgr,z2_heat_request,Z2 Heating Request,,18,2000,0291,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,z2_heat_request,Z2 Heating Request,,18,2000,0291,,s,IGN:1,,,,,s,onoff
 #Z2 Cooling Settings
 r,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Set Temp,,18,2000,7072,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_cool_temp_range,Z2 cooling Temp Range,,18,2000,0682,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
@@ -197,7 +197,7 @@ r,energymgr,z3_day_temp,Z3 Day Temp,,18,2000,6273,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_night_temp,Z3 Night Temp,,18,2000,6373,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_heat_setpoint_temp_set,Z3 Heat Set Temp,,18,2000,6573,,s,IGN:1,,,,,,SIN,10,°C
 #Z3 Summer Winter Changeover
-r,energymgr,z3_summer_winter_auto_switch,Z3 Summer Winter Auto Switch,,18,2000,0783,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,z3_summer_winter_auto_switch,Z3 Summer Winter Auto Switch,,18,2000,0783,,s,IGN:1,,,,,s,onoff
 r,energymgr,z3_summer_winter_temp_thresh,Z3 Summer Winter Threshold Temp,,18,2000,7973,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_summer_winter_switch_delay_time,Z3 Summer Winter Switch Delay Time,,18,2000,7A73,,s,IGN:1,,,,,,UIN,,min
 #Z3 Heating Settings
@@ -212,7 +212,7 @@ r,energymgr,z3_heat_request_mode,Z3 Heating Request Mode,,18,2000,ce7b,,s,IGN:1,
 #Z3 Diagnostics
 r,energymgr,z3_room_temp,Z3 Room Temp,,18,2000,7318,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_heat_setpoint_temp_check,Z3 Heating Check Temp,,18,2000,6b96,,s,IGN:1,,,,,,SIN,10,°C
-r,energymgr,z3_heat_request,Z3 Heating Request,,18,2000,0391,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,z3_heat_request,Z3 Heating Request,,18,2000,0391,,s,IGN:1,,,,,s,onoff
 #Z3 Cooling Settings
 r,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Set Temp,,18,2000,7073,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_cool_temp_range,Z3 cooling Temp Range,,18,2000,0683,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
@@ -232,9 +232,13 @@ w,energymgr,gas_cost,Hybrid system gas cost €c-kwh,,fe,2020,642b,,s,UIN,10,c�
 r,energymgr,electric_cost,Hybrid system electric cost €c-kwh,,18,2000,652b,,s,IGN:1,,,,,,UIN,10,c€
 w,energymgr,electric_cost,Hybrid system electric cost €c-kwh,,fe,2020,652b,,s,UIN,10,c€
 r,energymgr,pv_electric_cost,Hybrid system PV electric cost €c-kwh,,18,2000,662b,,s,IGN:1,,,,,,UIN,10,c€
-w,energymgr,pv_electric_cost,Hybrid system PV electric cost €c-kwh,,fe,2020,662b,,s,UIN,10,c€
+#w,energymgr,pv_electric_cost,Hybrid system PV electric cost €c-kwh,,fe,2020,662b,,s,UIN,10,c€
 r,energymgr,ext_boiler_heat_efficiency,Hybrid external boiler heating eff,,18,2000,782d,,s,IGN:1,,,,,,UIN,10
 r,energymgr,ext_boiler_dhw_efficiency,Hybrid external boiler DHW eff,,18,2000,762e,,s,IGN:1,,,,,,UIN,10
+r,energymgr,heatpump_calculated_cost,Heatpump Current Calculated Cost,,18,2000,6c47,,s,IGN:1,,,,,,UIN,10,c€
+r,energymgr,boiler_calculated_cost,Boiler Current Calculated Cost,,18,2000,7147,,s,IGN:1,,,,,,UIN,10,c€
+
+
 
 #Broadcasted messages and grab of transmitted messages.
 r,energymgr,ext_temp,External Temp,,fe,200f,7647,,s,SIN,10,°C
@@ -276,17 +280,17 @@ r,energymgr,day_temp_settings2,,13,fe,2020,6273,z3_day_temp,m,SIN,10,°C
 r,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,200e,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,200e,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,200e,c028,,s,BCD,0=off;1=timed;2=always_on
-r,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,200e,0b20,,s,BCD,0=off;1=on
+r,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,200e,0b20,,s,onoff
 
 #Broadcast reading and writing of operating modes, thanks to @pawgac
-r,energymgr,heating_status,Heating Status,,fe,200f,0120,,s,BCD,0=off;1=on
-w,energymgr,heating_status,Heating Status,,fe,2020,0120,,s,UIN
-r,energymgr,dhw_status,DHW Status,,fe,200f,0220,,s,BCD,0=off;1=on
-w,energymgr,dhw_status,DHW Status,,fe,2020,0220,,s,UIN
-r,energymgr,cooling_status,Cooling Status,,fe,200e,0f23,,s,BCD,0=off;1=on
-w,energymgr,cooling_status,Cooling Status,,fe,2020,0f23,,s,UIN
-r,energymgr,auto_function,Auto Function,,fe,200f,0520,,s,BCD,0=off;1=on
-w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,UIN
+r,energymgr,heating_status,Heating Status,,fe,200f,0120,,s,onoff
+w,energymgr,heating_status,Heating Status,,fe,2020,0120,,s,onoff
+r,energymgr,dhw_status,DHW Status,,fe,200f,0220,,s,onoff
+w,energymgr,dhw_status,DHW Status,,fe,2020,0220,,s,onoff
+r,energymgr,cooling_status,Cooling Status,,fe,200e,0f23,,s,onoff
+w,energymgr,cooling_status,Cooling Status,,fe,2020,0f23,,s,onoff
+r,energymgr,auto_function,Auto Function,,fe,200f,0520,,s,onoff
+w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,onoff
 
 
 
@@ -295,8 +299,8 @@ w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,UIN
 ############################################################################################
 
 #Heatpump direct ask
-r,heatpump,silent_mode,Silent Mode,,18,2000,0320,,s,IGN:1,,,,,,BCD,0=off;1=on
-w,heatpump,silent_mode,Silent Mode,,fe,2020,0320,,s,IGN:1,,,,,,BCD
+r,heatpump,silent_mode,Silent Mode,,18,2000,0320,,s,IGN:1,,,,,s,onoff
+w,heatpump,silent_mode,Silent Mode,,fe,2020,0320,,s,onoff
 #r,heatpump,heatpump_heating_flow_offset_temp,Heatpump Heating Flow Offset Temp,,18,2000,7d2b,,s,IGN:1,,,,,,SIN,10,°C
 #r,heatpump,heatpump_cooling_flow_offset_temp,Heatpump Cooling Flow Offset Temp,,18,2000,7f2b,,s,IGN:1,,,,,,SIN,10,°C
 r,heatpump,pump_operation,Pump Operation,,18,2000,c32a,ign,s,IGN:1,,,,,s,UCH,0=low_speed;1=high_speed;2=modulating
@@ -317,48 +321,48 @@ r,heatpump,heatpump_last_error,Heatpump Last Error - TBC,,18,2000,C54B,,s,IGN:1,
 r,heatpump,heatpump_safety_thermostat,Heatpump Safety Thermostat,,18,2000,1A11,,s,IGN:1,,,,,,BCD,0=open;1=closed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 r,heatpump,heatpump_flowmeter,Heatpump Flow Meter,,1e,2000,6e13,,s,IGN:1,,,,,,UIN,10,L
 r,heatpump,heatpump_flow_switch,Flow Switch State,,1e,2000,0C45,,s,IGN:1,,,,,,BCD,0=open;1=closed
-r,heatpump,heatpump_shutoff_protection,Heatpump Compressor Shutoff Protection,,1e,2000,1045,,s,IGN:1,,,,,,BCD,0=off;1=on,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r,heatpump,heatpump_shutoff_protection,Heatpump Compressor Shutoff Protection,,1e,2000,1045,,s,IGN:1,,,,,s,onoff,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 r,heatpump,heatpump_evap_pressure,Heatpump Evapourator Pressure,,1e,2000,6c4f,,s,IGN:1,,,,,,UIN,10,bar
 r,heatpump,heatpump_cond_pressure,Heatpump Condenser Pressure,,1e,2000,6d4f,,s,IGN:1,,,,,,UIN,10,bar
 #Menu - HP Diagnostic 3 Menu
 r,heatpump,heatpump_inverter_nominal_power,Heatpump Inverter Nominal Power,,1e,2000,6947,,s,IGN:1,,,,,,UIN,,kW
 r,heatpump,heatpump_compr_frequency,Heatpump Compressor Frequency,,1e,2000,cb46,,s,IGN:1,,,,,s,UCH,,Hz
 r,heatpump,heatpump_compr_modulation,Heatpump Compressor Modulation,,1e,2000,c446,,s,IGN:1,,,,,s,UCH,,pct
-r,heatpump,heatpump_electric_heater,Heatpump Electric Heater,,18,2000,1c45,,s,IGN:1,,,,,,BCD,0=off;1=on
-#r,heatpump,heatpump_main_pump,Heatpump Main Pump,,18,2000,c200,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,heatpump,heatpump_electric_heater,Heatpump Electric Heater,,18,2000,1c45,,s,IGN:1,,,,,s,onoff
+#r,heatpump,heatpump_main_pump,Heatpump Main Pump,,18,2000,c200,,s,IGN:1,,,,,s,onoff
 r,heatpump,heatpump_fan1_speed,Heatpump Fan1 Speed,,1e,2000,6e4f,,s,IGN:1,,,,,,UIN
 r,heatpump,heatpump_fan2_speed,Heatpump Fan2 Speed,,1e,2000,6f4f,,s,IGN:1,,,,,,UIN
 r,heatpump,heatpump_exp_valve,Heatpump Espansion Valve,,1e,2000,704f,,s,IGN:1,,,,,,UIN
 #strange results, to be confirmed
 r,heatpump,heatpump_compr_current,Heatpump Comp Current,,1e,2000,714f,,s,UIN,10,A
 #Menu - HP Diagnostic 4 Menu
-r,heatpump,heatpump_compressor_state,Heatpump Compr State,,1e,2000,1145,,s,BCD,0=off;1=on
-r,heatpump,heatpump_preheater_state,Heatpump PreHeater State,,1e,2000,1245,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,heatpump,heatpump_fan1_state,Heatpump Fan1 State,,1e,2000,1445,,s,BCD,0=off;1=on
-r,heatpump,heatpump_fan2_state,Heatpump Fan2 State,,1e,2000,1545,,s,BCD,0=off;1=on
+r,heatpump,heatpump_compressor_state,Heatpump Compr State,,1e,2000,1145,,s,onoff
+r,heatpump,heatpump_preheater_state,Heatpump PreHeater State,,1e,2000,1245,,s,IGN:1,,,,,s,onoff
+r,heatpump,heatpump_fan1_state,Heatpump Fan1 State,,1e,2000,1445,,s,onoff
+r,heatpump,heatpump_fan2_state,Heatpump Fan2 State,,1e,2000,1545,,s,onoff
 r,heatpump,heatpump_4way_valve_state,Heatpump 4Way Valve State,,1e,2000,1345,,s,BCD,0=heating;1=cooling
-r,heatpump,heatpump_base_pane_heater_state,Heatpump Base Pane Heater State,,1e,2000,1645,,s,BCD,0=off;1=on
+r,heatpump,heatpump_base_pane_heater_state,Heatpump Base Pane Heater State,,1e,2000,1645,,s,onoff
 
 #Menu - EM Diagnostics - 1 Input Menu
 r,energymgr,hybrid_status,Hybrid Status,,18,2000,c94b,,s,IGN:1,,,,,,UCH,0=Stand-By;1=Antifreeze Cycle;2=Heating Cycle;3=DHW Cycle;4=Thermal Cleanse Function;5=Air Purge function;6=Chimney Clean Function;7=Floor Drying Cycle;8=No Heat Generation;9=Manual Mode;10=Error/Manual Mode;11=Initialization;12=Off;14=Cooling Cycle;15=DHW Antifreeze Cycle;16=Photovoltaic Integration;17=Dehumidification;18=Pump Down;19=Buffer Heating and DHW;20=Buffer Cooling and DHW
 r,energymgr,LWT_target_temp,Water Flow Current Setpoint Temp,,18,2000,6047,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,dhw_store_temp,DHW Storage Water Temp,,18,2000,7017,,s,IGN:1,,,,,,SIN,10,°C
-r,energymgr,energymgr_hv_inv_1_status,HV IN 1,,18,2000,1d11,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,energymgr_hv_inv_2_status,HV IN 2,,18,2000,1c11,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,energymgr_hv_inv_3_status,HV IN 3,,18,2000,1f11,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,energymgr_aux1_input,AUX 1 Input State,,18,2000,1e11,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,energymgr,energymgr_hv_inv_1_status,HV IN 1,,18,2000,1d11,,s,IGN:1,,,,,s,onoff
+r,energymgr,energymgr_hv_inv_2_status,HV IN 2,,18,2000,1c11,,s,IGN:1,,,,,s,onoff
+r,energymgr,energymgr_hv_inv_3_status,HV IN 3,,18,2000,1f11,,s,IGN:1,,,,,s,onoff
+r,energymgr,energymgr_aux1_input,AUX 1 Input State,,18,2000,1e11,,s,IGN:1,,,,,s,onoff
 #Menu - EM Diagnostics - 2 Output Menu
-r,heatpump,heatpump_main_pump,HP Main Pump,,18,2000,c200,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,heatpump,heatpump_ext_pump,HP Ext Pump,,18,2000,c700,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,heatpump,heatpump_main_pump,HP Main Pump,,18,2000,c200,,s,IGN:1,,,,,s,onoff
+r,heatpump,heatpump_ext_pump,HP Ext Pump,,18,2000,c700,,s,IGN:1,,,,,s,onoff
 r,heatpump,heatpump_3way_valve_dhw_heat,HP 3Way valve,,18,2000,0601,,s,IGN:1,,,,,,BCD,0=dhw;1=heat
 r,heatpump,heatpump_3way_valve_heat_cool,HP 3Way valve,,18,2000,0701,,s,IGN:1,,,,,,BCD,0=heat;1=cool
-r,heatpump,heatpump_anode,HP Anode,,18,2000,1903,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,energymgr_aux1_out,HP Aux1 Output,,18,2000,1803,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,energymgr,energymgr_aux2_out,HP Aux2 Output,,18,2000,1A03,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,heatpump,heatpump_anode,HP Anode,,18,2000,1903,,s,IGN:1,,,,,s,onoff
+r,energymgr,energymgr_aux1_out,HP Aux1 Output,,18,2000,1803,,s,IGN:1,,,,,s,onoff
+r,energymgr,energymgr_aux2_out,HP Aux2 Output,,18,2000,1A03,,s,IGN:1,,,,,s,onoff
 
 #Menu - PWM
-r,heatpump,pump_max_pwm,HP Pump Max PWM,,1e,2001,d32c,ign,s,UCH,,pct
-r,heatpump,pump_min_pwm,HP Pump Min PWM,,1e,2001,d22c,ign,s,UCH,,pct
+r,heatpump,pump_max_pwm,HP Pump Max PWM,,1e,2001,d32c,,s,UCH,,pct
+r,heatpump,pump_min_pwm,HP Pump Min PWM,,1e,2001,d22c,,s,UCH,,pct
 
 
 #Other Undocumented Values
@@ -367,7 +371,12 @@ r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,63477c
 
 #Broadcasted messages and grab of transmitted messages.
 
-r,heatpump,compressor_info,Heatpump Compressor Data,7f,1e,2000,cb4673177217,,s,IGN:1,,,,compressor_frequency,s,UCH,,Hz,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
+#Message not sent anymore (FW update??)
+#r,heatpump,compressor_info,Heatpump Compressor Data,7f,1e,2000,cb4673177217,,s,IGN:1,,,,compressor_frequency,s,UCH,,Hz,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
+r,heatpump,compressor_info2,Heatpump Compressor Data2,13,1e,2000,72177317ca466247,,s,IGN:1,,,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
+
+r,heatpump,compressor_info,Heatpump Compressor Data,13,1e,2000,6e13cb46d84b,,s,IGN:1,,,,flow_meter,s,UIN,10,L,,compressor_frequency,s,UCH
+
 #r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,flow_meter,s,UIN,10,L
 r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,coolant_temp,s,SIN,10,°C
 r,heatpump,water_pump_info,Heatpump Water Pump Data,70,18,2000,c2000601,,s,IGN:1,,,,main_pump_status,s,BCD,0=off;1=on,,,heat_dhw_valve_mode,s,BCD,0=heating;1=dhw
@@ -382,15 +391,15 @@ r,heatpump,heatpump_other_info1,Heatpump Other Info1,,1e,2000,7910704f7417,,s,IG
 
 #Gateway direct asks
 #Menu - Connectivity
-r,gateway,gateway_wifi,Gateway Wifi,,84,2000,0921,,s,IGN:1,,,,,,BCD,0=off;1=on
-r,gateway,gateway_ntp,Gateway NTP,,84,2000,1421,,s,IGN:1,,,,,,BCD,0=off;1=on
+r,gateway,gateway_wifi,Gateway Wifi,,84,2000,0921,,s,IGN:1,,,,,s,onoff
+r,gateway,gateway_ntp,Gateway NTP,,84,2000,1421,,s,IGN:1,,,,,s,onoff
 r,gateway,gateway_wifi_state,Gateway Wifi,,84,2000,cc4b,,s,IGN:1,,,,,,UCH,0=off;1=initalizing;2=idle;3=ap_initializing;4=ap_mode;5=conecting;6=wifi_connected;7=cloud_init;8=cloud_connected;9=error
 r,gateway,gateway_wifi_signal,Gateway Wifi Signal Level,,84,2000,c3f0,,s,IGN:1,,,,,,UCH
 r,gateway,gateway_activation_state,Gateway Activation,,84,2000,c4f0,,s,IGN:1,,,,,,UCH,0=not_connected;1=not_activated;2=activated
 r,gateway,gateway_sw_update,Gateway SW Update,,84,2000,c89c,,s,IGN:1,,,,,,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
 
 #Gateway broadcast
-r,gateway,gateway_info1,Gateway info 1,,84,2000,d140cc4bc89ccc9a,config_changes,s,UCH,,,,gateway_wifi_state,s,UCH,0=off;1=initalizing;2=idle;3=ap_initializing;4=ap_mode;5=conecting;6=wifi_connected;7=cloud_init;8=cloud_connected;9=error,,,gateway_sw_update,s,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
+#r,gateway,gateway_info1,Gateway info 1,,84,2000,d140cc4bc89ccc9a,config_changes,s,UCH,,,,gateway_wifi_state,s,UCH,0=off;1=initalizing;2=idle;3=ap_initializing;4=ap_mode;5=conecting;6=wifi_connected;7=cloud_init;8=cloud_connected;9=error,,,gateway_sw_update,s,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
 
 
 ############################################################################################
@@ -424,3 +433,16 @@ r,boiler,config_changes,System Configuration Change Counter,,3c	,2000,d140,ign,s
 #r,heatpump,elco_hp_LWT_temp,Heating Water Flow Temp,,18,2000,6310,,s,IGN:1,,,,,,SIN,10,°C
 #r,heatpump,elco_hp_EWT_temp,Heating Water Return Temp,,18,2000,6610,,s,IGN:1,,,,,,SIN,10,°C
 #r,heatpump,elco_hp_return_temp,,,fe,2010,759e,,s,IGN:5,,,,elco_hp_return_temp,s,S3N,10,°C
+
+
+
+############################################################################################
+####                           TEST DECODING MESSAGES                                   ####
+############################################################################################
+
+
+#37 fe 2010 09 6147 640000 d746 0000
+r,boiler_test,unkn_info1,UNKN 1,,fe,2010,6147,6147_S3N,s,S3N,10,°C,,,s,IGN:2,,,,D746_UIN,s,UIN,10,°C
+
+#37 fe 2010 08 da46 9600   d3f2 0100
+r,boiler_test,unkn_info2,UNKN 2,,fe,2010,da46,da46_UIN,s,SIN,10,°C,,,s,IGN:2,,,,D3F2_BCD,s,BCD,0=off;1=on
