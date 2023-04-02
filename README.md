@@ -83,6 +83,59 @@ should be modified as follow:
 
 I've added version of my mqtt-hassio.cfg file, that has the write filter removed and with other minor changes to map correctly ebusd data in HA
 
+As a rule for the writing enabled parameters you should impose correct limits and stepping on the input variables in HA to avoid sending on the bus wrong/unsupported values (eg. temp of 21,33333333°C where the stepping is 0.1 or 0.5 degrees). The limits and the stepping should be set following the HVAC installer manual for the specific configuration (eg. the tmin and Tmax are for an underfloor heating configuration). 
+To impose those limits I use this section of the configuration.yaml in HA:
+
+```
+homeassistant:
+.....
+  customize:
+.....
+    number.ebusd_energymgr_z1_heat_offset:
+      name: Z1 Heat Offset
+      min: -7
+      max: 7
+      step: 1
+      mode: box
+    number.ebusd_energymgr_z1_heat_slope:
+      name: Z1 Heat Slope
+      min: 0.2
+      max: 1
+      step: 0.1
+      mode: box
+    number.ebusd_energymgr_z1_day_temp:
+      name: Z1 Day Temp
+      min: 10
+      max: 30
+      step: 0.5
+      mode: box
+    number.ebusd_energymgr_z1_night_temp:
+      name: Z1 Night Temp
+      min: 10
+      max: 30
+      step: 0.5
+      mode: box
+    number.ebusd_energymgr_electric_cost:
+      name: Electric Cost
+      min: 0.1
+      max: 99.9
+      step: 0.1
+      mode: box
+    number.ebusd_energymgr_gas_cost:
+      name: Gas Cost
+      min: 0.1
+      max: 99.9
+      step: 0.1
+      mode: box
+    number.ebusd_energymgr_z1_heat_room_temp_infl:
+      name: Z1 Room Temp Infl
+      min: 0
+      max: 20
+      step: 1
+      mode: box
+```
+
+
 
 ## Credits
 
