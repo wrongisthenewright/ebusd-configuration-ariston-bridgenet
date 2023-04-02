@@ -133,6 +133,19 @@ homeassistant:
       max: 20
       step: 1
       mode: box
+    number.ebusd_energymgr_z1_heat_water_max_temp:
+      name: Z1 Heat Max LWT
+      min: 20
+      max: 45
+      step: 1
+      mode: box
+    number.ebusd_energymgr_z1_heat_water_min_temp:
+      name: Z1 Heat Min LWT
+      min: 20
+      max: 45
+      step: 1
+      mode: box
+
 ```
 
 
