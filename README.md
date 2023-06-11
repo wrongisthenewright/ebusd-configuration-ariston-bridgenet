@@ -20,15 +20,15 @@ It's cheap, small and simple to use since it's powered directly by the bus, avoi
 I struggled to set it up correctly, you need to find the correct polarity of the cables, since Bridgenet is 0-24v powered, so inverting the cables may be required. I started with the adapter near the remote interface (Sensys+Light GW) but the cable lenght from the energy manager and the devices already powered by that ebus port caused tension loss (I think), random bus reconfigurations and errors; I moved the adapter near the boiler where I connected the wires directy at the boiler ebus port,this solved the issue but can cause latency errors with the bus (Ebusd-->wifi-->Esp32-->bus-->esp32-->wifi-->Ebusd), I blindily increased the ebusd latency parameter and added reading and writing retries to avoid most of the problems.
 The adapter I choose has a potentiometer that need to be carefully trimemd to your specific environment as explained in details here:  https://github.com/danielkucera/esp8266-arduino-ebus
 
-I followed this procedure:
+I followed this procedure (specific for Daniel Kucera adapter, may be tweaked for other wifi/ethernet adapter):
 1) set up Ebusd
 2) leave empty the config folder
 3) remove power to the HVAC system
 4) connect the adapter
 5) restore power to the HVAC
 6) configure adapter wifi (the adapter create automatically an hot spot at first power on, connect to it and set up your wifi), the device will reboot and join the wifi network
-7) find the adapter IP address (ping ebusd.local should do, if it does't work connect to you wifi AP/Router and search in the list of connected devices)
-8) Start Ebus in signal test mode (see here: https://github.com/john30/ebusd/wiki/6.-Hardware#adjusting-the-potentiometer)
+7) find the adapter IP address (ping esp-ebus.local should do, if it does't work connect to you wifi AP/Router and search in the list of connected devices)
+8) Start Ebusd in signal test mode (see here: https://github.com/john30/ebusd/wiki/6.-Hardware#adjusting-the-potentiometer)
 9) set the potentiometer setting
 10) loose a lot of time getting the correct setting
 11) loose another lot of time retrying :)
@@ -37,9 +37,8 @@ I followed this procedure:
 14) start ebusd with standard settings
 15) knock on wood/cross your fingers
 
-Since Bridgenet uses PBSB specific command to read and write the data the configuration as of now is configured only for read operations, albeit with many direct ask instructions.
+Since Bridgenet (Ariston Group ebus implementation) uses PBSB specific commands to read and write the data the configuration as of now is configured mainly for read operations, albeit with many direct ask instructions (a direct ask instruction actually write on the bus to request a device to answer back some parameter/settings).
 Many if not all the data are broadcasted on regular basis on the bus by the various device connected, It should be possible to get the same values simply sniffing the traffic, ATM I read from broadcasted messages most of the common parameters and set a cron script to read the parameters not broadcasted but interesting to my use case (see read_custom.sh script, it's a quick and dirty solution but it serves my needs).
-
 
 
 ## Added Writing lines to change system parameters
