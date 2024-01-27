@@ -83,7 +83,7 @@ r,boiler,last_error,Boiler Last Error,,3c,2002,040000,code,s,ULG,197=801-Calibra
 
 
 #Boiler Broadcasted messages
-r,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame,,,,,IGN:3,,,,,,IGN,,,,,
+r,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;20=pump anti-freeze;21=burner anti-freeze;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame,,,,,IGN:3,,,,,,IGN,,,,,
 
 r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UCH,,pct
