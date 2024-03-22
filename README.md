@@ -146,7 +146,20 @@ homeassistant:
       mode: box
 
 ```
+## Added Error messages decoding
 
+The error messages processing had been decoded (see https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet?tab=readme-ov-file#protocol-for-the-errors) with the help of Ysard brute force error detection script I've gathered and translated the error codes bindings in `_template.csv`, the codes are valid for a Genus One Hybrit Net HVAC system (boiler, heatpump, energymanager, wifi gateway and remote control panel), as it seems that the error codes are peculiar for each system configuration my list and template should be adapted for every use on different devices.
+You should use the python script to meticulously generate, retreive and reset every error message that your plant support/implement.
+In my case I had to increment the max error code value generated in the script to 255, from:
+
+```
+    generate_errors(load_results(), end=128, zone_commands=True)
+```
+to
+```
+    generate_errors(load_results(), end=255, zone_commands=True)
+```
+in one of the last lines of the script.
 
 
 ## Credits
@@ -155,6 +168,6 @@ All the working codes are the result of a fantastic job made by some user of the
 
 Some boiler codes came from https://github.com/komw/ariston-bus-bridgenet-ebusd.
 
-The writing rules are inspired by ysard repo https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet
+The writing rules are inspired by ysard repo https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet , from the same repo I've used the error messages brute force discovery script to find the meaning of the codes sent on the bus.
 
 
