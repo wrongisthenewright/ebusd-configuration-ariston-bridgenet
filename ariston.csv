@@ -8,8 +8,8 @@
 # When multiple lines are available to read some field the direct ask line is usually commented, to allow
 # the decoding using a line that grabs already broadcasted/transmitted data from the bus
 #
-# ANY HELP ON DECODING OTHER MESSAGES IS WELCOME, ATM THE MISSING BITS OF INFORMATION ARE RELATED TO
-# SCHEDULING PROGRAMS AND MANY BOILER RELATED DATA
+# ANY HELP ON DECODING OTHER MESSAGES IS WELCOME, ATM THE MISSING BITS OF INFORMATION ARE MAINLY
+# RELATED TO BOILER RELATED DATA
 
 
 ############################################################################################
@@ -17,38 +17,59 @@
 ############################################################################################
 
 # System Broadcast - cast date
-r,broadcast,cast_date,Cast Date,,fe,2070,,time,m,VTM,,,,date,m,HDA,,,,,,,,,,,,,,,,,,,,,,,,
+b,broadcast,cast_date,Cast Date,,fe,2070,,time,m,VTM,,,,date,m,HDA,,,,,,,,,,,,,,,,,,,,,,,,
 
 # System Bus reset write command
-w,broadcast,ebus_reset,Reset ebus,,fe,2034,,ebus_reset,m,HEX:9,,,,,,,,,,,,,,,,,,,,,,
+b,broadcast,ebus_reset,Reset ebus,,fe,2034,,ebus_reset,m,onoff,,,,,,,,,,,,,,,,,,,,,,
+w,broadcast,ebus_reset,Reset ebus,,fe,2031,ffffffffffffffffffffffff23fe00,ebus_reset,m,BCD,,,,,,,,,,,,,,,,,,,,,,
 
-# System Bus Scan and ID request  (eg. 00fe203a0102) - do not parse the messages as it doesn't contain meaningful info
-# r,broadcast,bus_scan,Bus Scan,00,fe,203a,,ign,m,IGN:1
+# System Bus Scan and ID request  (eg. 00fe203a0123) - do not parse the messages as it doesn't contain meaningful info
+# It seems that one device "special" address (00) scan the bus with a 203a command followed by every available bus address
+# then these devices reply with a 203b message stating their owm addresses
 # r,broadcast,bus_scan,Bus Scan,00,fe,203a,,HEX,m,HEX:1
 
 # System Bus ID Replies (eg. 03fe203b011e) - do not parse the messages until is found a way to forward both request and reply
+# These are part of the dicovery process/initial handshake following a bus scan command, it seems that every device reply
+# to the bus scan request with a message broadcasting his own slave address 03=sender, fe=bcast, 203b=bus scan reply, 23=slave address
+# some "special" device don't respect the rule of slave address=master address+5 (eg. 00/02, 00,23)
 # r,broadcast,bus_scan_reply,Bus Scan Reply,,fe,203b,,ign,m,IGN:1
 
 # System Bus Control (??) (eg. 7ffe20380503c8030708) - probably related to devices bus role identification
-# protocol not decoded atm, discarding the values
-r,broadcast,bus_control,Bus Control,,fe,2038,,ign,m,IGN:5
+# protocol not decoded atm, discarding the values, the first data hex byte seems to be related to the function of the device
+b,broadcast,bus_control,Bus Control,,fe,2038,,ign,m,IGN:5
 
 # Device Serial Numbers, commented here as Ebusd doesn't allow multiple lines with the same PBSB,COMMAND but different senders
-# 7f QQ, fe ZZ, 2031 PBSB, NO COMMAND CODE, 10 LEN, XXXXXXX...XXXXXXX 16 Hex bytes for serial (grab the first 14)  
-# NOT confirmed, the messages are sparse on the bus and it seems impossible to request the issuing 
+# 7f QQ, fe ZZ, 2031 PBSB, NO COMMAND CODE, 10 LEN, XXXXXXX...XXXXXXX 16 Hex bytes for serial (grab the first 12)  
+# NOT confirmed, the messages are sparse on the bus and it seems impossible to request the data with direct ask command
+b,broadcast,hp_serial_number,HPSerial,13,fe,2031,,value,m,STR:12
+b,broadcast,boiler_serial_number,BoilerSerial,37,fe,2031,,value,m,STR:12
+b,broadcast,gw_serial_number,GWSerial,70,fe,2031,,value,m,STR:12
+b,broadcast,sensys_serial_number,SystemSerial,7f,fe,2031,,value,m,STR:12
 
-#r,broadcast,hp_serial_number,HPSerial,13,fe,2031,,,m,STR:14
-#r,broadcast,boiler_serial_number,BoilerSerial,37,fe,2031,,,m,STR:14
-#r,broadcast,gw_serial_number,GWSerial,70,fe,2031,,,m,STR:14
-#r,broadcast,sensys_serial_number,SystemSerial,7f,fe,2031,,value,m,STR:14
 
-
-# 2002 PBSB with 000000 command seems to be used for gathering devices FW version, NOT CONFIRMED
+# 2002 PBSB with 000000 command seems to be used for gathering devices FW version, NOT CONFIRMED, only the remote command is 
+# verified (by accident??)
 r,sensys,remote_command_sw_version,RC-SW-Ver,,75,2002,000000,ign,s,IGN:3,,,,value,s,HEX:3
 r,sensys,boiler_sw_version,Boiler-SW-Ver,,3c,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 r,sensys,energymgr_sw_version,Boiler-SW-Ver,,18,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 r,sensys,heatpump_sw_version,Boiler-SW-Ver,,1e,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 r,sensys,23_sw_version,Boiler-SW-Ver,,23,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
+
+
+############################################################################################
+####                             ERROR HANDLING MESSAGES                                ####
+############################################################################################
+
+
+# Error CSV line came from https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet, I just added energymgr line for hybrid systems
+# Line to direcly ask boiler and energymgr the last error raised (last memory slot) 10 messages are stored, having history in HA I skip the others 
+r,boiler,last_error,Last Error,,3c,2002,0400,,s,error_code,,,7 first bits of byte,zone,s,BI0:7,,,,,s,IGN:2,,,Date: YY/MM/DD,year,s,UCH,,,,month,s,UCH,,,,day,s,UCH,,,,time,s,HTM,,
+r,energymgr,last_error, Last Error,,18,2002,0400,,s,error_code,,,7 first bits of byte,zone,s,BI0:7,,,,,s,IGN:2,,,Date: YY/MM/DD,year,s,UCH,,,,month,s,UCH,,,,day,s,UCH,,,,time,s,HTM,,
+
+# Line to decode the instant publishing of casted errors, the line works but when no error are present the system throws periodically
+# the ec=236 and ee=238 values (kind of continuous keepalive/test??) 
+# Ebusd doesn't allow multiple line with the same PBSB, even from different senders, I map all errors to the energymgr device
+r,energymgr,error,HP Casted Error,,fe,2004,,,m,error_code,
 
 
 ############################################################################################
@@ -72,15 +93,9 @@ r,boiler,flame_active,Flame active,,3c,2000,0e11,ign,s,IGN:1,,,,,s,onoff
 r,boiler,dhw_flowmeter,Boiler DHW Flowmeter,,3c,2000,6847,,s,IGN:1,,,,,,UIN,10,L
 r,boiler,diverter_valve,Boiler Diverter Valve,,3c,2000,c012,ign,s,IGN:1,,,,,,BCD,0=dhw;1=heating
 
-# Boiler Error Memory (10 codes) error mapping only for some codes
-# Reading only last error info
-# Error CSV line came from https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet, added energymgr line for hybrid systems
-r,boiler,last_error,Last Error,,3c,2002,0400,,s,error_code,,,7 first bits of byte,zone,s,BI0:7,,,,,s,IGN:2,,,Date: YY/MM/DD,year,s,UCH,,,,month,s,UCH,,,,day,s,UCH,,,,time,s,HTM,,
-r,energymgr,last_error, Last Error,,18,2002,0400,,s,error_code,,,7 first bits of byte,zone,s,BI0:7,,,,,s,IGN:2,,,Date: YY/MM/DD,year,s,UCH,,,,month,s,UCH,,,,day,s,UCH,,,,time,s,HTM,,
-
-
 #Boiler Broadcasted messages
-r,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame,,,,,IGN:3,,,,,,IGN,,,,,
+b,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,m,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame
+r,boiler,boiler_status,Boiler Status,,3c,2000,c04b,ign,s,IGN:1,,,,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame
 
 r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UCH,,pct
@@ -104,7 +119,6 @@ r,boiler,fan_speed,Boiler Fan Speed,,3c,2000,4013,,s,IGN:1,,,,,,UIN,,rpm
 ############################################################################################
 ####                             ENERGY MANAGER RELATED MESSAGES                        ####
 ############################################################################################
-
 
 #Energy Manager - User Parameters
 r,energymgr,heat_mode,HV IN 1,,18,2000,1c22,,s,IGN:1,,,,,,BCD,0=green;1=standard
@@ -158,7 +172,8 @@ r,energymgr,z1_summer_winter_auto_switch,Z1 Summer Winter Auto Switch,,18,2000,0
 r,energymgr,z1_summer_winter_temp_thresh,Z1 Summer Winter Threshold Temp,,18,2000,7971,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z1_summer_winter_switch_delay_time,Z1 Summer Winter Switch Delay Time,,18,2000,7A71,,s,IGN:1,,,,,,UIN,,min
 #Z1 Heating Settings
-r,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,18,2000,0081,,s,IGN:1,,,,,,BCD,0=low;1=high
+#r,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,18,2000,0081,,s,IGN:1,,,,,,BCD,0=low;1=high
+r,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,18,2000,0081,,s,IGN:1,,,,,,BCD
 w,energymgr,z1_heat_temp_range,Z1 Heating Temp Range,,fe,2020,0081,,s,BCD
 r,energymgr,z1_heat_therm_type_selection,Z1 Heating Thermoreg Type Selection,,18,2000,C079,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
 w,energymgr,z1_heat_therm_type_selection,Z1 Heating Thermoreg Type Selection,,fe,2020,C079,,s,BCD,
@@ -182,7 +197,9 @@ r,energymgr,z1_heat_request,Z1 Heating Request,,18,2000,0191,,s,IGN:1,,,,,s,onof
 #Z1 Cooling Settings
 r,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,18,2000,7071,,s,IGN:1,,,,,,SIN,10,°C
 w,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,fe,2020,7071,,s,SIN,10,°C
-r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
+#r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
+r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD
+
 w,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,fe,2020,0681,,s,BCD
 r,energymgr,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,18,2000,CB79,,s,IGN:1,,,,,,BCD,0=on-off;1=fixed_temp;2=toom_temp
 w,energymgr,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,fe,2020,CB79,,s,BCD
@@ -272,55 +289,55 @@ r,energymgr,boiler_calculated_cost,Boiler Current Calculated Cost,,18,2000,7147,
 
 
 #Broadcasted messages and grab of transmitted messages.
-r,energymgr,ext_temp,External Temp,,fe,200f,7647,,s,SIN,10,°C
-r,energymgr,z1_room_temp_bcast,Z1 Room temperature,,fe,2020,7118,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z2_room_temp_bcast,Z2 Room temperature,,fe,2020,7218,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z3_room_temp_bcast,Z3 Room temperature,,fe,2020,7318,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z1_setpoint_temp_bcast,Z1 Current Setpoint,,fe,200f,6996,z1_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z2_setpoint_temp_bcast,Z2 Current Setpoint,,fe,200f,6A96,z2_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z3_setpoint_temp_bcast,Z3 Current Setpoint,,fe,200f,6B96,z3_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z1_cool_setpoint_temp_bcast,Z1 Cool Setpoint temperature,,fe,200f,7071,z1_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z2_cool_setpoint_temp_bcast,Z2 Cool Setpoint temperature,,fe,200f,7072,z2_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,z3_cool_setpoint_temp_bcast,Z3 Cool Setpoint temperature,,fe,200f,7073,z3_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,ext_temp,External Temp,,fe,200f,7647,,s,SIN,10,°C
+b,energymgr,z1_room_temp_bcast,Z1 Room temperature,,fe,2020,7118,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z2_room_temp_bcast,Z2 Room temperature,,fe,2020,7218,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z3_room_temp_bcast,Z3 Room temperature,,fe,2020,7318,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z1_setpoint_temp_bcast,Z1 Current Setpoint,,fe,200f,6996,z1_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z2_setpoint_temp_bcast,Z2 Current Setpoint,,fe,200f,6A96,z2_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z3_setpoint_temp_bcast,Z3 Current Setpoint,,fe,200f,6B96,z3_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z1_cool_setpoint_temp_bcast,Z1 Cool Setpoint temperature,,fe,200f,7071,z1_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z2_cool_setpoint_temp_bcast,Z2 Cool Setpoint temperature,,fe,200f,7072,z2_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,z3_cool_setpoint_temp_bcast,Z3 Cool Setpoint temperature,,fe,200f,7073,z3_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 
 #day and night temp detected with specific lines
-#r,energymgr,z1_day_temp_bcast,Z1 Day temperature,,fe,200f,6271,,m,SIN,10,°C
-#r,energymgr,z2_day_temp_bcast,Z2 Day temperature,,fe,200f,6272,,m,SIN,10,°C
-#r,energymgr,z3_day_temp_bcast,Z3 Day temperature,,fe,200f,6273,,m,SIN,10,°C
-r,energymgr,z1_night_temp_bcast,Z1 Night temperature,,fe,200f,6371,,m,SIN,10,°C
-r,energymgr,z2_night_temp_bcast,Z2 Night temperature,,fe,200f,6372,,m,SIN,10,°C
-r,energymgr,z3_night_temp_bcast,Z3 Night temperature,,fe,200f,6373,,m,SIN,10,°C
-#r,energymgr,antifreeze_temp_bcast,Antifreeze temperature,,fe,200e,6426,antifreeze_temp_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,heat_temp_range,Heating Temp Range,13,fe,2020,0081,z1_heat_range,s,BCD,0=low;1=high,,,,s,IGN:2,,,,z2_heat_range,s,BCD,0=low;1=hign,,,,s,IGN:2,,,,z3_heat_range,s,BCD,0=low;1=high
-r,energymgr,heat_therm_type_selection,Heating Thermolregulation Type,,fe,200f,c079,z1_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z2_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z3_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
-r,energymgr,heat_slope,Heating Slope,,fe,2020,6a71,z1_heat_slope,m,UIN,100,,,,m,IGN:2,,,,z2_heat_slope,m,UIN,100,,,,m,IGN:2,,,,z3_heat_slope,m,UIN,100
-r,energymgr,z1_heat_offset_bcast,Z1 Heating Offset,,fe,200e,6471,z1_heat_offset,s,SIN,10,°C
-r,energymgr,z1_heat_offset_bcast_bis,Z1 Heating Offset,,fe,200f,6471,z1_heat_offset,s,SIN,10,°C
-r,energymgr,z2_heat_offset_bcast,Z2 Heating Offset,13,fe,200e,6472,,m,SIN,10,°C
-r,energymgr,z3_heat_offset_bcast,Z3 Heating Offset,13,fe,200e,6473,,m,SIN,10,°C
-r,energymgr,heat_request,Heating Request,13,fe,2010,0191,z1_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z2_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z3_heat_request,s,BCD,0=off;1=on
-r,energymgr,cooling_temp,Cooling Temp Info,,fe,2020,6a75,z1_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z2_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z3_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,cooling_setpoint_temp,s,SIN,10,°C
-r,energymgr,cooling_temp_range,Cooling Temp Range,13,fe,2020,0085010086010087010681,z1_cool_range,s,BCD,0=low;1=high
-r,energymgr,cool_slope,Cooling Slope,,fe,2020,7577,ign,m,IGN:4,,,,z1_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z2_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z3_cool_slope,s,UIN,100
+b,energymgr,z1_day_temp_bcast,Z1 Day temperature,,fe,200f,6271,,m,SIN,10,°C
+b,energymgr,z2_day_temp_bcast,Z2 Day temperature,,fe,200f,6272,,m,SIN,10,°C
+b,energymgr,z3_day_temp_bcast,Z3 Day temperature,,fe,200f,6273,,m,SIN,10,°C
+b,energymgr,z1_night_temp_bcast,Z1 Night temperature,,fe,200f,6371,,m,SIN,10,°C
+b,energymgr,z2_night_temp_bcast,Z2 Night temperature,,fe,200f,6372,,m,SIN,10,°C
+b,energymgr,z3_night_temp_bcast,Z3 Night temperature,,fe,200f,6373,,m,SIN,10,°C
+b,energymgr,antifreeze_temp_bcast,Antifreeze temperature,,fe,200e,6426,antifreeze_temp_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,heat_temp_range,Heating Temp Range,13,fe,2020,0081,z1_heat_range,s,BCD,0=low;1=high,,,,s,IGN:2,,,,z2_heat_range,s,BCD,0=low;1=hign,,,,s,IGN:2,,,,z3_heat_range,s,BCD,0=low;1=high
+b,energymgr,heat_therm_type_selection,Heating Thermolregulation Type,,fe,200f,c079,z1_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z2_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z3_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
+b,energymgr,heat_slope,Heating Slope,,fe,2020,6a71,z1_heat_slope,m,UIN,100,,,,m,IGN:2,,,,z2_heat_slope,m,UIN,100,,,,m,IGN:2,,,,z3_heat_slope,m,UIN,100
+b,energymgr,z1_heat_offset_bcast,Z1 Heating Offset,,fe,200e,6471,z1_heat_offset,s,SIN,10,°C
+b,energymgr,z1_heat_offset_bcast_bis,Z1 Heating Offset,,fe,200f,6471,z1_heat_offset,s,SIN,10,°C
+b,energymgr,z2_heat_offset_bcast,Z2 Heating Offset,13,fe,200e,6472,,m,SIN,10,°C
+b,energymgr,z3_heat_offset_bcast,Z3 Heating Offset,13,fe,200e,6473,,m,SIN,10,°C
+b,energymgr,heat_request,Heating Request,13,fe,2010,0191,z1_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z2_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z3_heat_request,s,BCD,0=off;1=on
+b,energymgr,cooling_temp,Cooling Temp Info,,fe,2020,6a75,z1_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z2_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z3_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,cooling_setpoint_temp,s,SIN,10,°C
+b,energymgr,cooling_temp_range,Cooling Temp Range,13,fe,2020,0085010086010087010681,z1_cool_range,s,BCD,0=low;1=high
+b,energymgr,cool_slope,Cooling Slope,,fe,2020,7577,ign,m,IGN:4,,,,z1_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z2_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z3_cool_slope,s,UIN,100
 #r,energymgr,z1_cool_therm_type_selection,Z1 Heating Thermoreg Type Selection,13,fe,2020,c97e04c97f04cb79,,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
 #r,energymgr,z1_cool_offset,Z1 Cooling Offset,13,fe,200e,7571,,s,SIN,10,°C
-r,energymgr,hybrid_LWT_setpoint,Hybrid LWT Setpoint,,fe,2010,6047,,s,SIN,10,°C
-r,energymgr,night_temp_settings,,13,fe,2020,6277,6277_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z3_night_temp,m,SIN,10,°C
-r,energymgr,day_temp_settings,,13,fe,2020,6176,6176_UIN,m,SIN,10,°C,,,m,IGN:2,,,,6177_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_day_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_day_temp,m,SIN,10,°C
-r,energymgr,day_temp_settings2,,13,fe,2020,6273,z3_day_temp,m,SIN,10,°C
-r,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,200e,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,200e,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,200e,c028,,s,BCD,0=off;1=timed;2=always_on
-r,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,200e,0b20,,s,onoff
+b,energymgr,hybrid_LWT_setpoint,Hybrid LWT Setpoint,,fe,2010,6047,,s,SIN,10,°C
+b,energymgr,night_temp_settings,,13,fe,2020,6277,6277_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z3_night_temp,m,SIN,10,°C
+b,energymgr,day_temp_settings,,13,fe,2020,6176,6176_UIN,m,SIN,10,°C,,,m,IGN:2,,,,6177_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_day_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_day_temp,m,SIN,10,°C
+b,energymgr,day_temp_settings2,,13,fe,2020,6273,z3_day_temp,m,SIN,10,°C
+b,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,200e,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,200e,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+b,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,200e,c028,,s,BCD,0=off;1=timed;2=always_on
+b,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,200e,0b20,,s,onoff
 
 # Broadcast reading and writing of operating modes, thanks to @pawgac
-r,energymgr,heating_status,Heating Status,,fe,200f,0120,,s,onoff
+b,energymgr,heating_status,Heating Status,,fe,200f,0120,,s,onoff
 w,energymgr,heating_status,Heating Status,,fe,2020,0120,,s,onoff
-r,energymgr,dhw_status,DHW Status,,fe,200f,0220,,s,onoff
+b,energymgr,dhw_status,DHW Status,,fe,200f,0220,,s,onoff
 w,energymgr,dhw_status,DHW Status,,fe,2020,0220,,s,onoff
-r,energymgr,cooling_status,Cooling Status,,fe,200e,0f23,,s,onoff
+b,energymgr,cooling_status,Cooling Status,,fe,200e,0f23,,s,onoff
 w,energymgr,cooling_status,Cooling Status,,fe,2020,0f23,,s,onoff
-r,energymgr,auto_function,Auto Function,,fe,200f,0520,,s,onoff
+b,energymgr,auto_function,Auto Function,,fe,200f,0520,,s,onoff
 w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,onoff
 
 
@@ -328,7 +345,9 @@ w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,onoff
 # Broadcast reading of Temperature override until specific time/date
 # eg. 70 fe 2073 PBSB 09 LEN af TEMP(x10) UCH 002d04 TIME VTI 090717 DATE HDA:3 0101 
 # commented as the remote controller sends other messages (unknown meaning) with this PBSB
-#r,energymgr,z1_setp_override,Temporary Z1 Cooling temp override,,fe,2073,,temp,s,UCH,10,°C,,time,s,VTI,,,,date,s,HDA:3 
+# maybe a conditional row can be used to grab only meaningful messages
+# r,energymgr,z1_setp_override,Temporary Z1 Cooling temp override,,fe,2073,,temp,s,UCH,10,°C,,time,s,VTI,,,,date,s,HDA:3 
+
 
 
 
@@ -355,10 +374,10 @@ r,heatpump,heatpump_condenser_outlet_temp,Heatpump Condenser Outlet Temp,,18,200
 r,heatpump,heatpump_teo_temp,Heatpump Condenser Outlet Water Temp,,1e,2000,7417,,s,IGN:1,,,,,,SIN,10,°C
 #Menu - HP Diagnostic 2 Menu
 r,heatpump,heatpump_mode,Heatpump Operating Mode,,18,2000,ca46,,s,IGN:1,,,,,,UCH,0=OFF;1=Stand_by;2=Cooling;3=Heating;4=Heating_boost;5=Cooling_boost;6=Heating_rating;7=Cooling_rating;8=Antifreeze;9=Defrost;10=Overtemp_prot;11=Timeguard;12=System_error;13=Reset_service;14=Coolant_recovery;15=Soft_fail,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-r,heatpump,heatpump_last_error,Heatpump Last Error - TBC,,18,2000,C54B,,s,IGN:1,,,,,,BCD,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+r,heatpump,heatpump_last_error,Heatpump Last Error - TBC,,18,2000,c54b,,s,IGN:1,,,,,,BCD
 r,heatpump,heatpump_safety_thermostat,Heatpump Safety Thermostat,,18,2000,1A11,,s,IGN:1,,,,,,BCD,0=open;1=closed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 r,heatpump,heatpump_flowmeter,Heatpump Flow Meter,,1e,2000,6e13,,s,IGN:1,,,,,,UIN,10,L
-r,heatpump,heatpump_flow_switch,Flow Switch State,,1e,2000,0C45,,s,IGN:1,,,,,,BCD,0=open;1=closed
+r,heatpump,heatpump_flow_switch,Flow Switch State,,1e,2000,0c45,,s,IGN:1,,,,,,BCD,0=open;1=closed
 r,heatpump,heatpump_shutoff_protection,Heatpump Compressor Shutoff Protection,,1e,2000,1045,,s,IGN:1,,,,,s,onoff,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 r,heatpump,heatpump_evap_pressure,Heatpump Evapourator Pressure,,1e,2000,6c4f,,s,IGN:1,,,,,,UIN,10,bar
 r,heatpump,heatpump_cond_pressure,Heatpump Condenser Pressure,,1e,2000,6d4f,,s,IGN:1,,,,,,UIN,10,bar
@@ -407,12 +426,13 @@ r,heatpump,pump_min_pwm,HP Pump Min PWM,,1e,2001,d22c,,s,UCH,,pct
 #r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,7c4f,,s,IGN:1,,,,,,UIN,,W
 r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,63477c4f,,s,IGN:3,,,,,,UIN,,W
 
+
 #Broadcasted messages and grab of transmitted messages.
 
 #Message not sent anymore (FW update??)
 #r,heatpump,compressor_info,Heatpump Compressor Data,7f,1e,2000,cb4673177217,,s,IGN:1,,,,compressor_frequency,s,UCH,,Hz,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
 r,heatpump,compressor_info2,Heatpump Compressor Data2,13,1e,2000,72177317ca466247,,s,IGN:1,,,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
-r,heatpump,compressor_info,Heatpump Compressor Data,13,1e,2000,6e13cb46d84b,,s,IGN:1,,,,flow_meter,s,UIN,10,L,,compressor_frequency,s,UCH
+r,heatpump,compressor_info,Heatpump Compressor Data,13,1e,2000,6e13cb46d84b,,s,IGN:1,,,,flow_meter,s,UIN,10,L,,compressor_frequency,s,UCH,,,,684b,s,UCH,1,X
 
 #r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,flow_meter,s,UIN,10,L
 r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,coolant_temp,s,SIN,10,°C
@@ -449,9 +469,9 @@ r,boiler,water_flow_info,Boiler Water Flow Data,13,3c,2000,681069106547409d,,s,I
 
 #grabbing Heating Parameters for various zones
 #r,energymgr,heat_room_temp_influence,Heating Room Temp Influence,,,2020,c07f01c279,z1_heat_room_temp_influence,s,UCH,,,,,s,IGN:2,,,,z2_heat_room_temp_influence,s,UCH,,,,,s,IGN:2,,,,z3_heat_room_temp_influence,s,UCH
-r,energymgr,heat_request_mode,Heating Request Mode,,,2020,cb7f00ce79,z1_heat_request_mode,m,BCD,0=standard;1=no_time_program;2=forced,,,,m,IGN:2,,,,z2_heat_request_mode,m,BCD,0=standard;1=no_time_program;2=forced,,,,m,IGN:2,,,,z3_heat_request_mode,m,BCD,0=standard;1=no_time_program;2=forced
+b,energymgr,heat_request_mode,Heating Request Mode,,fe,2020,cb7f00ce79,z1_heat_request_mode,m,BCD,0=standard;1=no_time_program;2=forced,,,,m,IGN:2,,,,z2_heat_request_mode,m,BCD,0=standard;1=no_time_program;2=forced,,,,m,IGN:2,,,,z3_heat_request_mode,m,BCD,0=standard;1=no_time_program;2=forced
 # enery manager current setopint temp broadcast for Z1,Z2 and Z3
-r,energymgr,setpoint_temp,Current Setpoint Temp,13,fe,2010,6996,z1_setpoint_temp,s,SIN,10,°C,,,s,IGN:3,,,,z2_setpoint_temp,s,SIN,10,°C,,,s,IGN:3,,,,z3_setpoint_temp,s,SIN,10,°C
+b,energymgr,setpoint_temp,Current Setpoint Temp,13,fe,2010,6996,z1_setpoint_temp,s,SIN,10,°C,,,s,IGN:3,,,,z2_setpoint_temp,s,SIN,10,°C,,,s,IGN:3,,,,z3_setpoint_temp,s,SIN,10,°C
 
 
 #DHW Buffer related messages
@@ -459,7 +479,7 @@ r,energymgr,setpoint_temp,Current Setpoint Temp,13,fe,2010,6996,z1_setpoint_temp
 
 
 #DHW temp related messages
-r,energymgr,dhw_info_3,DHW Temp Info,,fe,2020,6126,dhw_comfort_temp,s,SIN,10,°C,,,,IGN:2,,,,dhw_reduced_temp,s,SIN,10,°C
+b,energymgr,dhw_info_3,DHW Temp Info,,fe,2020,6126,dhw_comfort_temp,s,SIN,10,°C,,,,IGN:2,,,,dhw_reduced_temp,s,SIN,10,°C
 
 
 ##D140 confirmed as a counter of the device config changes, like a version counter (every device has it's own)
@@ -489,89 +509,19 @@ r,boiler,config_version_counter,System Configuration Change Counter,,3c,2000,d14
 # I won't try to implement it here because the default Ariston brand mobile app is already doing
 # a fairly decent job to do schedule programming
 
-r,ignored,ign4,QQfe2051XXXXX,,fe,2051,,ign,m,IGN:14
+b,ignored,ign4,QQfe2051XXXXX,,fe,2051,,ign,m,IGN:14
 
 # 2050 command is PROBABLY related to HEATING/COOLING time program messages, parsed here only to 
 # remove from ebusd logs the related "errors" of unknown messages; 
 # I won't try to decode/implement it here because the default Ariston brand mobile app is already doing
 # a fairly decent job to do schedule programming
-r,ignored,ign5,QQfe2050XXXXX,,fe,2050,,ign,m,IGN:11
+b,ignored,ign5,QQfe2050XXXXX,,fe,2050,,ign,m,IGN:11
 
 
 # 13fe20100c059100000691000007910000 
 # 0591, 0691, 0791 are Z5,6,7 heat request, discarded as not relevant to my use case
-r,ignored,ign6,QQfe2010XX0591,,fe,2010,0591,ign,m,IGN:10
+b,ignored,ign6,QQfe2010XX0591,,fe,2010,0591,ign,m,IGN:10
 
-
-############################################################################################
-####                           TEST DECODING MESSAGES                                   ####
-############################################################################################
-
-
-#703c2001020445 03000001 - 820 - no
-r,test_boiler,burner_power_pct,Bolier Power PCT,,3c,2001,0445,,s,UCH,,pct
-
-#703c200102c300 030000ff - 827 - yes
-r,test_boiler,pump_modulation,Bolier Pump Modulation,,3c,2001,c300,,s,UCH,,pct
-
-#703c2001020241 
-#r,test_boiler,unk1,,,3c,2001,0241,,s,UCH
-
-#703c2001020668 
-#r,test_boiler,unk2,,,3c,2001,0668,,s,UCH
-
-#703c200102c0f2 
-#r,test_boiler,unk3,,,3c,2001,c0f2,,s,UCH
-
-#703c200102c328 
-#r,test_boiler,unk4,,,3c,2001,c328,,s,UCH
-
-#703c200102c428 
-#r,test_boiler,unk5,,,3c,2001,c428,,s,UCH
-
-#703c200102d628 
-#r,test_boiler,unk6,,,3c,2001,d628,,s,UCH
-
-#703c200102d69c 
-#r,test_boiler,unk7,,,3c,2001,d69c,,s,UCH
-
-#703c20010240fb
-#r,test_boiler,unk8,,,3c,2001,40fb,,s,SIN
-
-#703c200102612b
-#r,test_boiler,unk9,,,3c,2001,612b,,s,SIN
-
-#703c200102622b
-#r,test_boiler,unk10,,,3c,2001,622b,,s,SIN
-
-#703c2001026710
-#r,test_boiler,unk11,,,3c,2001,6710,,s,SIN
-
-#13fe201008c64b0200c94b0200
-#r,test_boiler,unk12,,13,fe,2010,c64b,c64b,m,SIN,,,,,m,IGN:2,,,,c69b,m,SIN
-
-#13 1e 2020 0c 0b45 00 1745 00 1a45 00 1ef3 00 / 00
-#r,test_boiler,unk13,,13,1e,2020,0b45,0b45,m,UCH,,,,,m,IGN:2,,,,1745,m,UCH,,,,,m,IGN:2,,,,1a45,m,UCH,,,,,m,IGN:2,,,,1ef3,m,UCH
-
-# 13 1e 2020 0d ce9c 78 d09c 02 659f 4600 d5f0 00 / 00 
-# 13 1e 2020 0c ce9c 78 d09c 00 d89c 01 df9c 00
-# 13 1e 2020 0d ce9c 78 d09c 00 659f 4600 d5f0 00
-#r,test_boiler,unk14,,13,1e,2020,ce9c,ce9c,m,UCH,,,,,m,IGN:2,,,,d09c,m,UCH,,,,,m,IGN:2,,,,659f,m,SIN,,,,,m,IGN:2,,,,d5f0,m,UCH
-
-#37fe201004d7420000 
-#r,test_boiler,unk15,,37,fe,2010,d742,,m,SIN
-
-#37 fe 2010 09 6147 640000 d746 0000 
-#r,test_boiler,unk16,,37,fe,2010,6147,6147,m,S3N,,,,,m,IGN:2,,,,d746,m,SIN
-
-#37 fe 2010 08 da46 9600 d3f2 0100 
-#r,test_boiler,unk17,,37,fe,2010,da46,da46,m,SIN,,,,,m,IGN:2,,,,d3f2,m,SIN
-
-#13 37 2020 0c c604 00 c13d 00 c23d 00 c246 01 
-#r,test_boiler,unk18,,13,37,2020,c604,c604,m,SCH,1,PCT,,,m,IGN:2,,,,c13d,m,SCH,,,,,m,IGN:2,,,,c23d,m,SCH,,,,,m,IGN:2,,,,c246,m,SCH
-
-#13 fe 2010 08 c64b be00 c94b 0000
-#r,test_boiler,unk19,,13,fe,2010,c64b,c64b,m,SIN,,,,,,IGN:2,,,,c94b,m,SIN
 
 
 
