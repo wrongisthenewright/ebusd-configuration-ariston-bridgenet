@@ -154,12 +154,21 @@ In my case I had to increment the max error code value generated in the script t
 
 ```
     generate_errors(load_results(), end=128, zone_commands=True)
-```
+``` 
 to
 ```
     generate_errors(load_results(), end=255, zone_commands=True)
 ```
 in one of the last lines of the script.
+
+## Fixed Bus rest option
+
+I needed a way to start a full discovery process on the bus via Home Assistant input, the solutio was to craft a write line in the CSV 
+
+`w,broadcast,ebus_reset,Reset ebus,,fe,2031,ffffffffffffffffffffffff23fe00,ebus_reset,m,BCD,,,,,,,,,,,,,,,,,,,,,,`
+
+with this line I added an helper button in HA, then added an automation that, on pressing this virtual button, send a MQTT message to `ebusd/broadcast/ebus_rest/set` with a payload of 20 (but I think that all non-zero values are good). 
+This cause a bs discovery process and a full system reset.
 
 
 ## Credits
