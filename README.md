@@ -161,7 +161,7 @@ to
 ```
 in one of the last lines of the script.
 
-## Fixed Bus rest option
+## Fixed Bus reset option
 
 I needed a way to start a full discovery process on the bus via Home Assistant input, the solutio was to craft a write line in the CSV 
 
