@@ -167,7 +167,7 @@ I needed a way to start a full discovery process on the bus via Home Assistant i
 
 `w,broadcast,ebus_reset,Reset ebus,,fe,2031,ffffffffffffffffffffffff23fe00,ebus_reset,m,BCD,,,,,,,,,,,,,,,,,,,,,,`
 
-with this line I added an helper button in HA, then added an automation that, on pressing this virtual button, send a MQTT message to `ebusd/broadcast/ebus_rest/set` with a payload of 20 (but I think that all non-zero values are good). 
+with this line present in the CSV I then added an helper button in HA and added an automation that, on pressing this virtual button, sends a MQTT message to `ebusd/broadcast/ebus_rest/set` with a payload of 20 (but I think that all non-zero values are good). 
 This cause a bs discovery process and a full system reset.
 
 
