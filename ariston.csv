@@ -115,6 +115,16 @@ r,boiler,boiler_type,Boiler Type,,3c,2000,c428,ign,s,IGN:1,,,,,s,UCH,0=mixed_ins
 r,boiler,hybrid_integration,Hybrid Integration,,3c,2000,0420,ign,s,IGN:1,,,,,s,onoff
 r,boiler,fan_speed,Boiler Fan Speed,,3c,2000,4013,,s,IGN:1,,,,,,UIN,,rpm
 
+#Boiler Maintenance Schedule (expressed in number of months to next maintenance needed)
+#r,boiler,maintenance_months,Month to next maintenance,,3c,2001,c627,ign,s,IGN:1,,,,,s,UCH
+r,boiler,maintenance_months,Month to next maintenance,,3c,2001,c627,,s,UCH        
+w,boiler,maintenance_months,Month to next maintenance,,3c,2020,c627,,m,UCH
+
+#Boiler Maintenance Requred Warning Enable/Disable (0=No Warning,1=Warning on scheduled maintenance)
+r,boiler,maintenance_warnings_enabled,Enable warning on next maintenance,,3c,2001,0e20,,s,onoff
+w,boiler,maintenance_warnings_enabled,Enable warning on next maintenance,,3c,2020,0e20,,m,onoff
+
+
 
 ############################################################################################
 ####                             ENERGY MANAGER RELATED MESSAGES                        ####
@@ -521,7 +531,3 @@ b,ignored,ign5,QQfe2050XXXXX,,fe,2050,,ign,m,IGN:11
 # 13fe20100c059100000691000007910000 
 # 0591, 0691, 0791 are Z5,6,7 heat request, discarded as not relevant to my use case
 b,ignored,ign6,QQfe2010XX0591,,fe,2010,0591,ign,m,IGN:10
-
-
-
-
