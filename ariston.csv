@@ -50,7 +50,7 @@ b,broadcast,sensys_serial_number,SystemSerial,7f,fe,2031,,value,m,STR:12
 # 2002 PBSB with 000000 command seems to be used for gathering devices FW version, NOT CONFIRMED, only the remote command is 
 # verified (by accident??)
 r,sensys,remote_command_sw_version,RC-SW-Ver,,75,2002,000000,ign,s,IGN:3,,,,value,s,HEX:3
-r,sensys,boiler_sw_version,Boiler-SW-Ver,,3c,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
+r,sensys,boiler_sw_version,Boiler-SW-Ver,,3c,2002,000000,ign,s,IGN:1,,,,value,s,HEX:3
 r,sensys,energymgr_sw_version,Boiler-SW-Ver,,18,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 r,sensys,heatpump_sw_version,Boiler-SW-Ver,,1e,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 r,sensys,23_sw_version,Boiler-SW-Ver,,23,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
@@ -66,8 +66,8 @@ r,sensys,23_sw_version,Boiler-SW-Ver,,23,2002,000000,ign,s,IGN:1,,,,value,s,HEX:
 r,boiler,last_error,Last Error,,3c,2002,0400,,s,error_code,,,7 first bits of byte,zone,s,BI0:7,,,,,s,IGN:2,,,Date: YY/MM/DD,year,s,UCH,,,,month,s,UCH,,,,day,s,UCH,,,,time,s,HTM,,
 r,energymgr,last_error, Last Error,,18,2002,0400,,s,error_code,,,7 first bits of byte,zone,s,BI0:7,,,,,s,IGN:2,,,Date: YY/MM/DD,year,s,UCH,,,,month,s,UCH,,,,day,s,UCH,,,,time,s,HTM,,
 
-# Line to decode the instant publishing of casted errors, the line works but when no error are present the system throws periodically
-# the ec=236 and ee=238 values (kind of continuous keepalive/test??) 
+# Line to decode the instant publishing of casted errors, the line works but when no error are present the system throws every hour 
+# the error ec=236 and, 20/22minutes later the ee=238 value (kind of continuous keepalive/test??) 
 # Ebusd doesn't allow multiple line with the same PBSB, even from different senders, I map all errors to the energymgr device
 r,energymgr,error,HP Casted Error,,fe,2004,,,m,error_code,
 
@@ -78,9 +78,8 @@ r,energymgr,error,HP Casted Error,,fe,2004,,,m,error_code,
 
 #Boiler direct ask
 r,boiler,boiler_pressure,Boiler circuit pressure,,3c,2000,7547,ign,s,IGN,,,,boiler_pressure,,UCH,10,bar
-
-#read by other broadcasted message
-#r,boiler,LWT_temp,heating temperature,,3c,2000,6810,ign,s,IGN:1,,,,,,SIN,10,°C
+# LWT_temp read by other broadcasted message, commenting this line to avoid ebusd error for duplicate ID
+# r,boiler,LWT_temp,heating temperature,,3c,2000,6810,ign,s,IGN:1,,,,,,SIN,10,°C
 r,boiler,EWT_temp,heating return temperature,,3c,2000,6910,ign,s,IGN:1,,,,,,SIN,10,°C
 r,boiler,diverter_cycles,Number of diverter valve cycles,,3c,2000,40d2,ign,s,IGN:1,,,,,,UIN
 r,boiler,ignition_cycles,Number of ignition cycles,,3c,2000,42d8,ign,s,IGN:1,,,,,,UIN
@@ -96,7 +95,6 @@ r,boiler,diverter_valve,Boiler Diverter Valve,,3c,2000,c012,ign,s,IGN:1,,,,,,BCD
 #Boiler Broadcasted messages
 b,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,m,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame
 r,boiler,boiler_status,Boiler Status,,3c,2000,c04b,ign,s,IGN:1,,,,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame
-
 r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UCH,,pct
 r,boiler,heat_min_power_pct,Heating Bolier Min Power PCT,,3c,2000,6429,ign,s,IGN:1,,,,,s,UCH,,pct
@@ -108,7 +106,7 @@ r,boiler,pressure_monitoring_device,Pressure Monitoring Device,,3c,2000,c328,ign
 r,boiler,warning_pressure,Water Warning Pressure,,3c,2000,c12a,ign,s,IGN:1,,,,,s,UCH,10,bar
 r,boiler,ignition_delay,Ignition Delay,,3c,2000,c027,ign,s,IGN:1,,,,,s,UCH,,min
 r,boiler,pump_operation,Pump Operation,,3c,2000,c228,ign,s,IGN:1,,,,,s,UCH,0=low_speed;1=high_speed;2=modulating
-r,boiler,heat_post_circulation,Ignition Delay,,3c,2000,c227,ign,s,IGN:1,,,,,s,UCH,,min
+r,boiler,heat_post_circulation,Heating Post Circulation,,3c,2000,c227,ign,s,IGN:1,,,,,s,UCH,,min
 r,boiler,ignition_delay_type,Ignition Delay Type,,3c,2000,1320,ign,s,IGN:1,,,,,s,UCH,0=manual;1=automatic
 r,boiler,nominal_power,Nominal Power,,3c,2000,6829,ign,s,IGN:1,,,,,s,UCH,,kW
 r,boiler,boiler_type,Boiler Type,,3c,2000,c428,ign,s,IGN:1,,,,,s,UCH,0=mixed_instant;1=ext_tank_ntc;2=ext_tank_thermostat;3=micro_storage;4=stratification_storage;6=storage
@@ -131,7 +129,7 @@ w,boiler,maintenance_warnings_enabled,Enable warning on next maintenance,,3c,202
 ############################################################################################
 
 #Energy Manager - User Parameters
-r,energymgr,heat_mode,HV IN 1,,18,2000,1c22,,s,IGN:1,,,,,,BCD,0=green;1=standard
+r,energymgr,heat_mode,Heating Mode,,18,2000,1c22,,s,IGN:1,,,,,,BCD,0=green;1=standard
 r,energymgr,dhw_pv_delta_t_setp,PV Delta T DHW setpoint temp,,18,2000,762d,,s,IGN:1,,,,,,SIN,10,°C
 
 #Energy Manager - I/O Settings
@@ -146,20 +144,24 @@ r,energymgr,aux_2_pump,HV IN 3,,18,2000,cf2c,,s,IGN:1,,,,,,BCD,0=Auxiliary circu
 #Energy Manager - HP Settings 1
 r,energymgr,hydraulic_scheme,Hydraulic Scheme,,18,2000,dc28,,s,IGN:1,,,,,,BCD,0=none;1=bolier;2=boiler_buffer
 r,energymgr,hp_disable_ext_temp_threshold,HP disable ext. temp threshold,,18,2000,7226,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,hp_disable_ext_temp_threshold,HP disable ext. temp threshold,,fe,2020,7226,,s,SIN,10,°C
 r,energymgr,boiler_disable_ext_temp_threshold,Boiler disable ext. temp threshold,,18,2000,7126,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,boiler_disable_ext_temp_threshold,Boiler disable ext. temp threshold,,fe,2020,7126,,s,SIN,10,°C
 r,energymgr,heating_mode,Heating Mode,,18,2000,c728,,s,IGN:1,,,,,,BCD,0=eco;1=eco_plus;2=average;3=comfort;4=comfort_plus
+w,energymgr,heating_mode,Heating Mode,,fe,2020,c728,,s,BCD,0=eco;1=eco_plus;2=average;3=comfort;4=comfort_plus
 r,heatpump,heat_LWT_offset,HP Heating LWT Correction,,18,2000,7d2b,,s,IGN:1,,,,,,SIN,10,°C
+w,heatpump,heat_LWT_offset,HP Heating LWT Correction,,fe,2020,7d2b,,s,SIN,10,°C
 r,heatpump,boost_time,HP boost time,,18,2000,602b,,s,IGN:1,,,,,,MIN,,min
-r,energymgr,ext_temp_offset,External Temp Correction,,18,2000,7426,,s,IGN:1,,,,,,SIN,10,°C
+#r,energymgr,ext_temp_offset,External Temp Correction,,18,2000,7426,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,protech_anode,ProTech Anode,,18,2000,0d23,,s,IGN:1,,,,,s,onoff
 r,energymgr,pump_antiblock,Pump Antiblocking,,18,2000,1823,,s,IGN:1,,,,,s,onoff
-
+w,energymgr,pump_antiblock,Pump Antiblocking,,fe,2020,1823,,s,onoff
 
 #Energy Manager - Cooling
 r,energymgr,cooling_available,Cooling Function Available,,18,2000,1023,,s,IGN:1,,,,,s,onoff
 r,energymgr,cool_anticycle_time,HP Cooling Anticycle Delay,,18,2000,d927,,s,IGN:1,,,,,,UCH,,min
 r,heatpump,cool_LWT_temp_offset,HP Cooling LWT Correction,,18,2000,7f2b,,s,IGN:1,,,,,,SIN,10,°C
-
+w,heatpump,cool_LWT_temp_offset,HP Cooling LWT Correction,,fe,2020,7f2b,,s,SIN,10,°C
 r,energymgr,hybrid_mode,Hybrid Mode,,18,2000,c628,,s,IGN:1,,,,,,BCD,0=auto;1=boiler_only;2=hp_only
 w,energymgr,hybrid_mode,Hybrid Mode,,fe,2020,c628,,s,BCD
 r,energymgr,hybrid_logic,Hybrid Logic,,18,2000,ce28,,s,IGN:1,,,,,,BCD,0=max_saving;1=max_eco
@@ -171,12 +173,16 @@ w,energymgr,hybrid_logic,Hybrid Logic,,fe,2020,ce28,,s,BCD
 
 #Z1 Setpoint
 r,energymgr,z1_day_temp,Z1 Day Temp,,18,2000,6271,,s,IGN:1,,,,,,SIN,10,°C
-w,energymgr,z1_day_temp,,,fe,2020,6271,,s,SIN,10,°C
+b,energymgr,z1_day_temp,Z1 Day Temp,,fe,200f,6271,,m,SIN,10,°C
+w,energymgr,z1_day_temp,Z1 Day Temp,,fe,2020,6271,,s,SIN,10,°C
 r,energymgr,z1_night_temp,Z1 Night Temp,,18,2000,6371,,s,IGN:1,,,,,,SIN,10,°C
-w,energymgr,z1_night_temp,,,fe,2020,6371,,s,SIN,10,°C
-r,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,fe,200e,6571,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z1_night_temp,Z1 Night Temp,,fe,2020,6371,,s,SIN,10,°C
+b,energymgr,z1_night_temp,Z1 Night Temp,,fe,200f,6371,,m,SIN,10,°C
+r,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,18,2000,6571,,s,IGN:1,,,,,s,SIN,10,°C
+b,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,fe,200e,6571,,m,SIN,10,°C,,,m,IGN:4
 w,energymgr,z1_heat_setpoint_temp_set,Z1 Heat Set Temp,,fe,2020,6571,,s,SIN,10,°C
 r,energymgr,antifreeze_temp,Antifreeze Temp,,18,2000,6426,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,antifreeze_temp,Antifreeze Temp,,fe,200e,6426,,s,SIN,10,°C
 #Z1 Summer Winter Changeover
 r,energymgr,z1_summer_winter_auto_switch,Z1 Summer Winter Auto Switch,,18,2000,0781,,s,IGN:1,,,,,s,onoff
 r,energymgr,z1_summer_winter_temp_thresh,Z1 Summer Winter Threshold Temp,,18,2000,7971,,s,IGN:1,,,,,,SIN,10,°C
@@ -190,7 +196,9 @@ w,energymgr,z1_heat_therm_type_selection,Z1 Heating Thermoreg Type Selection,,fe
 r,energymgr,z1_heat_slope,Z1 Heat Thermoreg Slope,,18,2000,6a71,,s,IGN:1,,,,,,UIN,100
 w,energymgr,z1_heat_slope,Z1 Heat Thermoreg Slope,,fe,2020,6a71,,s,UIN,100
 r,energymgr,z1_heat_offset,Z1 Heat Thermoreg Offset,,18,2000,6471,,s,IGN:1,,,,,,SCH,10
-w,energymgr,z1_heat_offset,Z1 Heat Thermoreg Offset,,fe,2020,6471,,s,SCH,10
+w,energymgr,z1_heat_offset,Z1 Heat Thermoreg Offset,,fe,2020,6471,,s,SIN,10
+b,energymgr,z1_heat_offset,Z1 Heating Offset,,fe,200f,6471,,s,SIN,10,°C
+#w,energymgr,z1_heat_offset,Z1 Heat Thermoreg Offset,,fe,2020,6471,,s,SCH,10
 r,energymgr,z1_heat_room_temp_infl,Z1 Heating Room Temp Influence,,18,2000,c279,,s,IGN:1,,,,,,UCH
 w,energymgr,z1_heat_room_temp_infl,Z1 Heating Room Temp Influence,,fe,2020,c279,,s,UCH
 r,energymgr,z1_heat_water_max_temp,Z1 Heating Max Water Temp,,18,2000,6071,,s,IGN:1,,,,,,SIN,10,°C
@@ -202,48 +210,70 @@ w,energymgr,z1_heat_request_mode,Z1 Heating Request Mode,,fe,2020,ce79,,s,BCD
 
 #Z1 Diagnostic
 r,energymgr,z1_room_temp,Z1 Room Temp,,18,2000,7118,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z1_room_temp,Z1 Room Temp,,fe,2020,7118,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,z1_setpoint_temp,Z1 Current Setpoint,,18,2000,6996,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z1_setpoint_temp,Z1 Current Setpoint,,fe,200f,6996,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,z1_heat_request,Z1 Heating Request,,18,2000,0191,,s,IGN:1,,,,,s,onoff
 #Z1 Cooling Settings
-r,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,18,2000,7071,,s,IGN:1,,,,,,SIN,10,°C
-w,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Set Temp,,fe,2020,7071,,s,SIN,10,°C
-#r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
-r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD
-
+r,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,18,2000,7071,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,fe,200f,7071,,s,SIN,10,°C
+w,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,fe,2020,7071,,s,SIN,10,°C
+r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
 w,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,fe,2020,0681,,s,BCD
 r,energymgr,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,18,2000,CB79,,s,IGN:1,,,,,,BCD,0=on-off;1=fixed_temp;2=toom_temp
 w,energymgr,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,fe,2020,CB79,,s,BCD
 r,energymgr,z1_cool_slope,Z1 Cool Thermoreg Slope,,18,2000,7671,,s,IGN:1,,,,,,UIN,100
 r,energymgr,z1_cool_offset,Z1 Cool Thermoreg Offset,,18,2000,7571,,s,IGN:1,,,,,,SCH,10
+b,energymgr,z1_cool_offset,Z1 Cool Thermoreg Offset,,fe,200e,7571,,s,SIN,10,°C
 r,energymgr,z1_cool_water_max_temp,Z1 Cooling Max Water Temp,,18,2000,7171,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z1_cool_water_min_temp,Z1 Cooling Min Water Temp,,18,2000,7371,,s,IGN:1,,,,,,SIN,10,°C
 
 #Z2 Settings (if present)
 #Z2 Setpoint
 r,energymgr,z2_day_temp,Z2 Day Temp,,18,2000,6272,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z2_day_temp,Z2 Day Temp,,fe,200f,6272,,m,SIN,10,°C
+w,energymgr,z2_day_temp,,,fe,2020,6272,,s,SIN,10,°C
 r,energymgr,z2_night_temp,Z2 Night Temp,,18,2000,6372,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z2_night_temp,Z2 Night Temp,,fe,200f,6372,,s,SIN,10,°C
+w,energymgr,z2_night_temp,Z2 Night Temp,,fe,2020,6372,,s,SIN,10,°C
 r,energymgr,z2_heat_setpoint_temp_set,Z2 Heat Set Temp,,18,2000,6572,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z2_heat_setpoint_temp_set,Z2 Heat Set Temp,,fe,2020,6572,,s,SIN,10,°C
 #Z2 Summer Winter Changeover
 r,energymgr,z2_summer_winter_auto_switch,Z2 Summer Winter Auto Switch,,18,2000,0782,,s,IGN:1,,,,,s,onoff
 r,energymgr,z2_summer_winter_temp_thresh,Z2 Summer Winter Threshold Temp,,18,2000,7972,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z2_summer_winter_switch_delay_time,Z2 Summer Winter Switch Delay Time,,18,2000,7A72,,s,IGN:1,,,,,,UIN,,min
 #Z2 Heating Settings
 r,energymgr,z2_heat_temp_range,Z2 Heating Temp Range,,18,2000,0082,,s,IGN:1,,,,,,BCD,0=low;1=high
+w,energymgr,z2_heat_temp_range,Z2 Heating Temp Range,,fe,2020,0082,,s,BCD
 r,energymgr,z2_heat_therm_type_selection,Z2 Heating Thermoreg Type Selection,,18,2000,c07a,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
+w,energymgr,z2_heat_therm_type_selection,Z2 Heating Thermoreg Type Selection,,fe,2020,c07a,,s,BCD,
 r,energymgr,z2_heat_slope,Z2 Heat Thermoreg Slope,,18,2000,6a72,,s,IGN:1,,,,,,UIN,100
-#r,energymgr,z2_heat_offset,Z2 Heat Thermoreg Offset,,18,2000,6472,,s,IGN:1,,,,,,SCH,10
+w,energymgr,z2_heat_slope,Z2 Heat Thermoreg Slope,,fe,2020,6a72,,s,UIN,100
+r,energymgr,z2_heat_offset,Z2 Heat Thermoreg Offset,,18,2000,6472,,s,IGN:1,,,,,,SCH,10
+b,energymgr,z2_heat_offset,Z2 Heating Offset,13,fe,200e,6472,,s,SIN,10,°C
+w,energymgr,z2_heat_offset,Z2 Heat Thermoreg Offset,,fe,2020,6472,,s,SCH,10
 r,energymgr,z2_heat_room_temp_infl,Z2 Heating Room Temp Influence,,18,2000,c27a,,s,IGN:1,,,,,,UCH
+w,energymgr,z2_heat_room_temp_infl,Z2 Heating Room Temp Influence,,fe,2020,c27a,,s,UCH
 r,energymgr,z2_heat_water_max_temp,Z2 Heating Max Water Temp,,18,2000,6072,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z2_heat_water_max_temp,Z2 Heating Max Water Temp,,fe,2020,6072,,s,SIN,10,°C
 r,energymgr,z2_heat_water_min_temp,Z2 Heating Min Water Temp,,18,2000,6172,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z2_heat_water_min_temp,Z2 Heating Min Water Temp,,fe,2020,6172,,s,SIN,10,°C
 r,energymgr,z2_heat_request_mode,Z2 Heating Request Mode,,18,2000,ce7a,,s,IGN:1,,,,,,BCD,0=standard;1=no_time_program;2=forced
+w,energymgr,z2_heat_request_mode,Z2 Heating Request Mode,,fe,2020,ce7a,,s,BCD
 #Z2 Diagnostic
 r,energymgr,z2_room_temp,Z2 Room Temp,,18,2000,7218,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z2_room_temp,Z2 Room Temp,,fe,2020,7218,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,z2_setpoint_temp,Z2 Current Setpoint,,18,2000,6a96,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z2_setpoint_temp,Z2 Current Setpoint,,fe,200f,6A96,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,z2_heat_request,Z2 Heating Request,,18,2000,0291,,s,IGN:1,,,,,s,onoff
 #Z2 Cooling Settings
-r,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Set Temp,,18,2000,7072,,s,IGN:1,,,,,,SIN,10,°C
+r,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Forced Setpoint Temp,,18,2000,7072,,s,IGN:1,,,,,,SIN,10,°C 
+b,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Forced Setpoint Temp,,fe,200f,7072,,s,SIN,10,°C
+w,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Set Temp,,fe,2020,7072,,s,SIN,10,°C
 r,energymgr,z2_cool_temp_range,Z2 cooling Temp Range,,18,2000,0682,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
+w,energymgr,z2_cool_temp_range,Z2 cooling Temp Range,,fe,2020,0682,,s,BCD
 r,energymgr,z2_cool_therm_type_selection,Z2 Cooling Thermoreg Type Selection,,18,2000,CB7a,,s,IGN:1,,,,,,BCD,0=on-off;1=fixed_temp;2=toom_temp
+w,energymgr,z2_cool_therm_type_selection,Z2 Cooling Thermoreg Type Selection,,fe,2020,CB7a,,s,BCD
 r,energymgr,z2_cool_slope,Z2 Cool Thermoreg Slope,,18,2000,7672,,s,IGN:1,,,,,,UIN,100
 r,energymgr,z2_cool_offset,Z2 Cool Thermoreg Offset,,18,2000,7572,,s,IGN:1,,,,,,SCH,10
 r,energymgr,z2_cool_water_max_temp,Z2 Cooling Max Water Temp,,18,2000,7172,,s,IGN:1,,,,,,SIN,10,°C
@@ -252,29 +282,49 @@ r,energymgr,z2_cool_water_min_temp,Z2 Cooling Min Water Temp,,18,2000,7372,,s,IG
 #Z3 Settings (if present)
 #Z3 Setpoint
 r,energymgr,z3_day_temp,Z3 Day Temp,,18,2000,6273,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z3_day_temp,Z3 Day Temp,,fe,200f,6273,,m,SIN,10,°C
+w,energymgr,z3_day_temp,,,fe,2020,6273,,s,SIN,10,°C
 r,energymgr,z3_night_temp,Z3 Night Temp,,18,2000,6373,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z3_night_temp,Z3 Night Temp,,fe,200f,6373,,m,SIN,10,°C
+w,energymgr,z3_night_temp,Z3 Night Temp,,fe,2020,6373,,s,SIN,10,°C
 r,energymgr,z3_heat_setpoint_temp_set,Z3 Heat Set Temp,,18,2000,6573,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z3_heat_setpoint_temp_set,Z3 Heat Set Temp,,fe,2020,6573,,s,SIN,10,°C
 #Z3 Summer Winter Changeover
 r,energymgr,z3_summer_winter_auto_switch,Z3 Summer Winter Auto Switch,,18,2000,0783,,s,IGN:1,,,,,s,onoff
 r,energymgr,z3_summer_winter_temp_thresh,Z3 Summer Winter Threshold Temp,,18,2000,7973,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,z3_summer_winter_switch_delay_time,Z3 Summer Winter Switch Delay Time,,18,2000,7A73,,s,IGN:1,,,,,,UIN,,min
 #Z3 Heating Settings
 r,energymgr,z3_heat_temp_range,Z3 Heating Temp Range,,18,2000,0083,,s,IGN:1,,,,,,BCD,0=low;1=high
+w,energymgr,z3_heat_temp_range,Z3 Heating Temp Range,,fe,2020,0083,,s,BCD
 r,energymgr,z3_heat_therm_type_selection,Z3 Heating Thermoreg Type Selection,,18,2000,c07b,,s,IGN:1,,,,,,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
+w,energymgr,z3_heat_therm_type_selection,Z3 Heating Thermoreg Type Selection,,fe,2020,C07b,,s,BCD,
 r,energymgr,z3_heat_slope,Z3 Heat Thermoreg Slope,,18,2000,6a73,,s,IGN:1,,,,,,UIN,100
-#r,energymgr,z3_heat_offset,Z3 Heat Thermoreg Offset,,18,2000,6473,,s,IGN:1,,,,,,SCH,10
+w,energymgr,z3_heat_slope,Z3 Heat Thermoreg Slope,,fe,2020,6a73,,s,UIN,100
+r,energymgr,z3_heat_offset,Z3 Heat Thermoreg Offset,,18,2000,6473,,s,IGN:1,,,,,,SCH,10
+b,energymgr,z3_heat_offset_bcast,Z3 Heating Offset,13,fe,200e,6473,,s,SIN,10,°C
+w,energymgr,z3_heat_offset,Z3 Heat Thermoreg Offset,,fe,2020,6473,,s,SCH,10
 r,energymgr,z3_heat_room_temp_infl,Z3 Heating Room Temp Influence,,18,2000,c27b,,s,IGN:1,,,,,,UCH
+w,energymgr,z3_heat_room_temp_infl,Z3 Heating Room Temp Influence,,fe,2020,c27b,,s,UCH
 r,energymgr,z3_heat_water_max_temp,Z3 Heating Max Water Temp,,18,2000,6073,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z3_heat_water_max_temp,Z3 Heating Max Water Temp,,fe,2020,6073,,s,SIN,10,°C
 r,energymgr,z3_heat_water_min_temp,Z3 Heating Min Water Temp,,18,2000,6173,,s,IGN:1,,,,,,SIN,10,°C
+w,energymgr,z3_heat_water_min_temp,Z3 Heating Min Water Temp,,fe,2020,6173,,s,SIN,10,°C
 r,energymgr,z3_heat_request_mode,Z3 Heating Request Mode,,18,2000,ce7b,,s,IGN:1,,,,,,BCD,0=standard;1=no_time_program;2=forced
+w,energymgr,z3_heat_request_mode,Z3 Heating Request Mode,,fe,2020,ce7b,,s,BCD
 #Z3 Diagnostics
 r,energymgr,z3_room_temp,Z3 Room Temp,,18,2000,7318,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z3_room_temp,Z3 Room Temp,,fe,2020,7318,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,z3_setpoint_temp,Z3 Current Setpoint,,18,2000,6b96,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z3_setpoint_temp,Z3 Current Setpoint,,fe,200f,6B96,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 r,energymgr,z3_heat_request,Z3 Heating Request,,18,2000,0391,,s,IGN:1,,,,,s,onoff
 #Z3 Cooling Settings
-r,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Set Temp,,18,2000,7073,,s,IGN:1,,,,,,SIN,10,°C
+r,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,18,2000,7073,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,fe,200f,7073,,s,SIN,10,°C
+w,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,fe,2020,7073,,s,SIN,10,°C
 r,energymgr,z3_cool_temp_range,Z3 cooling Temp Range,,18,2000,0683,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
+w,energymgr,z3_cool_temp_range,Z3 cooling Temp Range,,fe,2020,0683,,s,BCD
 r,energymgr,z3_cool_therm_type_selection,Z3 Cooling Thermoreg Type Selection,,18,2000,cb7b,,s,IGN:1,,,,,,BCD,0=on-off;1=fixed_temp;2=toom_temp
+w,energymgr,z3_cool_therm_type_selection,Z3 Cooling Thermoreg Type Selection,,fe,2020,cb7b,,s,BCD
 r,energymgr,z3_cool_slope,Z3 Cool Thermoreg Slope,,18,2000,7673,,s,IGN:1,,,,,,UIN,100
 r,energymgr,z3_cool_offset,Z3 Cool Thermoreg Offset,,18,2000,7573,,s,IGN:1,,,,,,SCH,10
 r,energymgr,z3_cool_water_max_temp,Z3 Cooling Max Water Temp,,18,2000,7173,,s,IGN:1,,,,,,SIN,10,°C
@@ -297,48 +347,33 @@ r,energymgr,heatpump_calculated_cost,Heatpump Current Calculated Cost,,18,2000,6
 r,energymgr,boiler_calculated_cost,Boiler Current Calculated Cost,,18,2000,7147,,s,IGN:1,,,,,,UIN,10,c€
 
 
+#Broadcasted messages and grab of transmitted messages
 
-#Broadcasted messages and grab of transmitted messages.
 b,energymgr,ext_temp,External Temp,,fe,200f,7647,,s,SIN,10,°C
-b,energymgr,z1_room_temp_bcast,Z1 Room temperature,,fe,2020,7118,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z2_room_temp_bcast,Z2 Room temperature,,fe,2020,7218,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z3_room_temp_bcast,Z3 Room temperature,,fe,2020,7318,room_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z1_setpoint_temp_bcast,Z1 Current Setpoint,,fe,200f,6996,z1_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z2_setpoint_temp_bcast,Z2 Current Setpoint,,fe,200f,6A96,z2_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z3_setpoint_temp_bcast,Z3 Current Setpoint,,fe,200f,6B96,z3_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z1_cool_setpoint_temp_bcast,Z1 Cool Setpoint temperature,,fe,200f,7071,z1_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z2_cool_setpoint_temp_bcast,Z2 Cool Setpoint temperature,,fe,200f,7072,z2_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-b,energymgr,z3_cool_setpoint_temp_bcast,Z3 Cool Setpoint temperature,,fe,200f,7073,z3_cool_setpoint_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-
-#day and night temp detected with specific lines
-b,energymgr,z1_day_temp_bcast,Z1 Day temperature,,fe,200f,6271,,m,SIN,10,°C
-b,energymgr,z2_day_temp_bcast,Z2 Day temperature,,fe,200f,6272,,m,SIN,10,°C
-b,energymgr,z3_day_temp_bcast,Z3 Day temperature,,fe,200f,6273,,m,SIN,10,°C
-b,energymgr,z1_night_temp_bcast,Z1 Night temperature,,fe,200f,6371,,m,SIN,10,°C
-b,energymgr,z2_night_temp_bcast,Z2 Night temperature,,fe,200f,6372,,m,SIN,10,°C
-b,energymgr,z3_night_temp_bcast,Z3 Night temperature,,fe,200f,6373,,m,SIN,10,°C
-b,energymgr,antifreeze_temp_bcast,Antifreeze temperature,,fe,200e,6426,antifreeze_temp_temp,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 b,energymgr,heat_temp_range,Heating Temp Range,13,fe,2020,0081,z1_heat_range,s,BCD,0=low;1=high,,,,s,IGN:2,,,,z2_heat_range,s,BCD,0=low;1=hign,,,,s,IGN:2,,,,z3_heat_range,s,BCD,0=low;1=high
 b,energymgr,heat_therm_type_selection,Heating Thermolregulation Type,,fe,200f,c079,z1_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z2_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room,,,,s,IGN:3,,,,z3_therm_type,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
 b,energymgr,heat_slope,Heating Slope,,fe,2020,6a71,z1_heat_slope,m,UIN,100,,,,m,IGN:2,,,,z2_heat_slope,m,UIN,100,,,,m,IGN:2,,,,z3_heat_slope,m,UIN,100
-b,energymgr,z1_heat_offset_bcast,Z1 Heating Offset,,fe,200e,6471,z1_heat_offset,s,SIN,10,°C
-b,energymgr,z1_heat_offset_bcast_bis,Z1 Heating Offset,,fe,200f,6471,z1_heat_offset,s,SIN,10,°C
-b,energymgr,z2_heat_offset_bcast,Z2 Heating Offset,13,fe,200e,6472,,m,SIN,10,°C
-b,energymgr,z3_heat_offset_bcast,Z3 Heating Offset,13,fe,200e,6473,,m,SIN,10,°C
 b,energymgr,heat_request,Heating Request,13,fe,2010,0191,z1_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z2_heat_request,s,BCD,0=off;1=on,,,,s,IGN:3,,,,z3_heat_request,s,BCD,0=off;1=on
-b,energymgr,cooling_temp,Cooling Temp Info,,fe,2020,6a75,z1_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z2_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z3_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,cooling_setpoint_temp,s,SIN,10,°C
-b,energymgr,cooling_temp_range,Cooling Temp Range,13,fe,2020,0085010086010087010681,z1_cool_range,s,BCD,0=low;1=high
+b,energymgr,cooling_temps,Cooling Temps Range,,fe,2020,6a75,z1_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z2_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,z3_cool_temp,s,SIN,10,°C,,,s,IGN:2,,,,cooling_setpoint_temp,s,SIN,10,°C
+b,energymgr,cooling_temp_range,Cooling Temp Range,13,fe,2020,0085010086010087010681,z1_cool_range,m,BCD,0=fancoil;1=underfloorheating
 b,energymgr,cool_slope,Cooling Slope,,fe,2020,7577,ign,m,IGN:4,,,,z1_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z2_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z3_cool_slope,s,UIN,100
 #r,energymgr,z1_cool_therm_type_selection,Z1 Heating Thermoreg Type Selection,13,fe,2020,c97e04c97f04cb79,,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
-#r,energymgr,z1_cool_offset,Z1 Cooling Offset,13,fe,200e,7571,,s,SIN,10,°C
-b,energymgr,hybrid_LWT_setpoint,Hybrid LWT Setpoint,,fe,2010,6047,,s,SIN,10,°C
 b,energymgr,night_temp_settings,,13,fe,2020,6277,6277_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z3_night_temp,m,SIN,10,°C
 b,energymgr,day_temp_settings,,13,fe,2020,6176,6176_UIN,m,SIN,10,°C,,,m,IGN:2,,,,6177_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_day_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_day_temp,m,SIN,10,°C
-b,energymgr,day_temp_settings2,,13,fe,2020,6273,z3_day_temp,m,SIN,10,°C
+
+#DHW Temp settings
+r,energymgr,dhw_comfort_temp,DHW Comfort Temp,,18,2000,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 b,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,200e,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+w,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,2020,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,energymgr,dhw_economy_temp,DHW Economy Temp,,18,2000,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 b,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,200e,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+w,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,2020,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,energymgr,dhw_comfort_mode,DHW Comfort Mode,,18,2000,c028,,s,BCD,0=off;1=timed;2=always_on
 b,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,200e,c028,,s,BCD,0=off;1=timed;2=always_on
+w,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,2020,c028,,s,BCD,0=off;1=timed;2=always_on
+r,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,18,2000,0b20,,s,onoff
 b,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,200e,0b20,,s,onoff
+w,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,2020,0b20,,s,onoff
 
 # Broadcast reading and writing of operating modes, thanks to @pawgac
 b,energymgr,heating_status,Heating Status,,fe,200f,0120,,s,onoff
@@ -360,7 +395,6 @@ w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,onoff
 
 
 
-
 ############################################################################################
 ####                             HEAT PUMP RELATED MESSAGES                             ####
 ############################################################################################
@@ -368,10 +402,8 @@ w,energymgr,auto_function,Auto Function,,fe,2020,0520,,s,onoff
 #Heatpump direct ask
 r,heatpump,silent_mode,Silent Mode,,18,2000,0320,,s,IGN:1,,,,,s,onoff
 w,heatpump,silent_mode,Silent Mode,,fe,2020,0320,,s,onoff
-#r,heatpump,heatpump_heating_flow_offset_temp,Heatpump Heating Flow Offset Temp,,18,2000,7d2b,,s,IGN:1,,,,,,SIN,10,°C
-#r,heatpump,heatpump_cooling_flow_offset_temp,Heatpump Cooling Flow Offset Temp,,18,2000,7f2b,,s,IGN:1,,,,,,SIN,10,°C
 r,heatpump,pump_operation,Pump Operation,,18,2000,c32a,ign,s,IGN:1,,,,,s,UCH,0=low_speed;1=high_speed;2=modulating
-
+w,heatpump,pump_operation,Pump Operation,,fe,2020,c32a,,s,UCH,0=low_speed;1=high_speed;2=modulating
 
 #Menu - HP Diagnostic 1 Menu
 r,heatpump,heatpump_ext_temp,External Temp,,18,2000,7810,,s,IGN:1,,,,,,SIN,10,°C
@@ -412,7 +444,8 @@ r,heatpump,heatpump_base_pane_heater_state,Heatpump Base Pane Heater State,,1e,2
 
 #Menu - EM Diagnostics - 1 Input Menu
 r,energymgr,hybrid_status,Hybrid Status,,18,2000,c94b,,s,IGN:1,,,,,,UCH,0=Stand-By;1=Antifreeze Cycle;2=Heating Cycle;3=DHW Cycle;4=Thermal Cleanse Function;5=Air Purge function;6=Chimney Clean Function;7=Floor Drying Cycle;8=No Heat Generation;9=Manual Mode;10=Error/Manual Mode;11=Initialization;12=Off;14=Cooling Cycle;15=DHW Antifreeze Cycle;16=Photovoltaic Integration;17=Dehumidification;18=Pump Down;19=Buffer Heating and DHW;20=Buffer Cooling and DHW
-r,energymgr,LWT_target_temp,Water Flow Current Setpoint Temp,,18,2000,6047,,s,IGN:1,,,,,,SIN,10,°C
+r,energymgr,hybrid_LWT_setpoint,Hybrid LWT Setpoint,,18,2000,6047,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,hybrid_LWT_setpoint,Hybrid LWT Setpoint,,fe,2010,6047,,s,SIN,10,°C
 r,energymgr,dhw_store_temp,DHW Storage Water Temp,,18,2000,7017,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,energymgr_hv_inv_1_status,HV IN 1,,18,2000,1d11,,s,IGN:1,,,,,s,onoff
 r,energymgr,energymgr_hv_inv_2_status,HV IN 2,,18,2000,1c11,,s,IGN:1,,,,,s,onoff
@@ -428,8 +461,8 @@ r,energymgr,energymgr_aux1_out,HP Aux1 Output,,18,2000,1803,,s,IGN:1,,,,,s,onoff
 r,energymgr,energymgr_aux2_out,HP Aux2 Output,,18,2000,1A03,,s,IGN:1,,,,,s,onoff
 
 #Menu - PWM
-r,heatpump,pump_max_pwm,HP Pump Max PWM,,1e,2001,d32c,,s,UCH,,pct
-r,heatpump,pump_min_pwm,HP Pump Min PWM,,1e,2001,d22c,,s,UCH,,pct
+r,heatpump,pump_max_pwm,HP Pump Max PWM,,1e,2000,d32c,,s,IGN:1,,,,,s,UCH,,pct
+r,heatpump,pump_min_pwm,HP Pump Min PWM,,1e,2000,d22c,,s,IGN:1,,,,,s,UCH,,pct
 
 
 #Other Undocumented Values
@@ -459,11 +492,17 @@ r,heatpump,heatpump_other_info1,Heatpump Other Info1,,1e,2000,7910704f7417,,s,IG
 #Gateway direct asks
 #Menu - Connectivity
 r,gateway,gateway_wifi,Gateway Wifi,,84,2000,0921,,s,IGN:1,,,,,s,onoff
-r,gateway,gateway_ntp,Gateway NTP,,84,2000,1421,,s,IGN:1,,,,,s,onoff
+w,gateway,gateway_wifi,Gateway Wifi,,84,2020,0921,,m,onoff
+r,gateway,gateway_ntp,Gateway NTP enabled,,84,2000,1421,,s,IGN:1,,,,,s,onoff
+w,gateway,gateway_ntp,Gateway NTP Enabled,,84,2020,1421,,m,onoff
 r,gateway,gateway_wifi_state,Gateway Wifi,,84,2000,cc4b,,s,IGN:1,,,,,,UCH,0=off;1=initalizing;2=idle;3=ap_initializing;4=ap_mode;5=conecting;6=wifi_connected;7=cloud_init;8=cloud_connected;9=error
 r,gateway,gateway_wifi_signal,Gateway Wifi Signal Level,,84,2000,c3f0,,s,IGN:1,,,,,,UCH
 r,gateway,gateway_activation_state,Gateway Activation,,84,2000,c4f0,,s,IGN:1,,,,,,UCH,0=not_connected;1=not_activated;2=activated
 r,gateway,gateway_sw_update,Gateway SW Update,,84,2000,c89c,,s,IGN:1,,,,,,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
+r,gateway,internet_wheather,Internet Wheather,,84,2001,0488,,s,IGN:1,,,,,s,onoff
+w,gateway,internet_wheather,Internet Wheather,,84,2020,0488,,m,onoff
+b,gateway,internet_wheather_temp_offset,Internet Wheather Temp Offset,,fe,200e,7426,,m,IGN:2,,,,,m,SIN,10,°C
+w,gateway,internet_wheather_temp_offset,Internet Wheather Temp Offset,,fe,2020,7426,,m,SIN,10,°C
 
 #Gateway broadcast
 #r,gateway,gateway_info1,Gateway info 1,,84,2000,d140cc4bc89ccc9a,config_changes,s,UCH,,,,gateway_wifi_state,s,UCH,0=off;1=initalizing;2=idle;3=ap_initializing;4=ap_mode;5=conecting;6=wifi_connected;7=cloud_init;8=cloud_connected;9=error,,,gateway_sw_update,s,UCH,0=initializing;1=waiting;2=upd_micro_1;3=upd_micro_2
@@ -487,10 +526,8 @@ b,energymgr,setpoint_temp,Current Setpoint Temp,13,fe,2010,6996,z1_setpoint_temp
 #DHW Buffer related messages
 #r,energymgr,dhw_info_2,DHW Store Info,,18,2000,1c1170170601c200,,s,IGN:1,,,,heatpump_hv_inv_2,s,BCD,0=off;1=on,,,dhw_store_temp,s,SIN,10,°C,,3way_valve_state,s,BCD,0=dhw;1=heating,,,heatpump_main_pump,s,BCD,0=off;1=on
 
-
 #DHW temp related messages
 b,energymgr,dhw_info_3,DHW Temp Info,,fe,2020,6126,dhw_comfort_temp,s,SIN,10,°C,,,,IGN:2,,,,dhw_reduced_temp,s,SIN,10,°C
-
 
 ##D140 confirmed as a counter of the device config changes, like a version counter (every device has it's own)
 r,energymgr,config_version_counter,System Configuration Change Counter,,84,2000,d140,ign,s,IGN:1,,,,,,UCH,,,,,,,,,,,,,,,,,,,,,,,,

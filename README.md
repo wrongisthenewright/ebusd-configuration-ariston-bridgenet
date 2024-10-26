@@ -15,9 +15,14 @@ You need to configure Ebusd with the option requided for your environment (MQTT 
 
 **BEWARE:**  connecting external device to your heating system may void warranty and cause malfunctions, the HVAC system runs with power grid voltages, be really,really, really carefull! Also consider that adding custom circuit to your system may void your warranty, be aware of this issue and use my configuration and advices at your own risk.
 
-As an adapter I use this: https://lectronz.com/products/ebus-to-wifi-adapter. 
+As an adapter I now use the "official" ebusd adapter from John, I switched from my previous adapter as I had an old version of Daniel's adapter that didn't "natively" support external power, I had some problem with bus power and choose to switch to John's adapter that has a USB port to power the shield. I've noticed that Daniel's adapter last version does indeed have the USB port to power the adapter indipendently from the bus. 
+
+If using the latest John's version of the adapter you can simply connect it to the bus, power it via USB and it should activate the built in AP, connect to this wifi and configure the adapter (http://192.168.4.1), it's really smooth and, once joined to your router's SSID find it's IP and connect to it.
+Pay attention on which protocol you chose (standard or enhanced) as it need to be reflected on ebusd configuration as well.
+
+I'm leaving this paragraph in case someone choose to use Daniel's adapter (https://lectronz.com/products/ebus-to-wifi-adapter). 
 It's cheap, small and simple to use since it's powered directly by the bus, avoiding the necessity of external power adapter and being electrically isolated, I managed to wire it near the boiler/energy manager, but be careful: you need to balance some aspects, latency, wifi signal, number of device present on the bus line used are the primary ones.
-I struggled to set it up correctly, you need to find the correct polarity of the cables, since Bridgenet is 0-24v powered, so inverting the cables may be required. I started with the adapter near the remote interface (Sensys+Light GW) but the cable lenght from the energy manager and the devices already powered by that ebus port caused tension loss (I think), random bus reconfigurations and errors; I moved the adapter near the boiler where I connected the wires directy at the boiler ebus port,this solved the issue but can cause latency errors with the bus (Ebusd-->wifi-->Esp32-->bus-->esp32-->wifi-->Ebusd), I blindily increased the ebusd latency parameter and added reading and writing retries to avoid most of the problems.
+I struggled to set it up correctly, you need to find the correct polarity of the cables, since Bridgenet is 0-24v powered, so inverting the cables may be required. I started with the adapter near the remote interface (Sensys+Light GW) but the cable lenght from the energy manager and the devices already powered by that ebus port caused tension loss, random bus reconfigurations and errors; I moved the adapter near the boiler where I connected the wires directy at the boiler ebus port,this solved the issue but can cause latency errors with the bus (Ebusd-->wifi-->Esp32-->bus-->esp32-->wifi-->Ebusd), I blindily increased the ebusd latency parameter and added reading and writing retries to avoid most of the problems.
 The adapter I choose has a potentiometer that need to be carefully trimemd to your specific environment as explained in details here:  https://github.com/danielkucera/esp8266-arduino-ebus
 
 I followed this procedure (specific for Daniel Kucera adapter, may be tweaked for other wifi/ethernet adapter):
@@ -45,8 +50,8 @@ Many if not all the data are broadcasted on regular basis on the bus by the vari
 
 In the CSV tere are now many lines enabling the writing of system patameters/settings. ATM I've added the ones more interesting in my use case, thus permitting to:
 - enable/disable operating modes (Cooling, Heating, DHW, Climatic Thermoregulation) 
-- change Z1 Day, Night temp
-- change Z1 climatic thermoregulation parametes (slope, offset, room temp infl., LWTmin, LWTmax)
+- change Day, Night temp
+- change climatic thermoregulation parametes (slope, offset, room temp infl., LWTmin, LWTmax)
 - change Hybrid sysytem energy costs (gas/electric)
 
 The CSV lines for those parameters are now primarily coded for Home Assistant integration via MQTT but with some simple thinkering should be possible to adapt it to other domotic applications.
@@ -67,9 +72,11 @@ ebusd/sensys/dhw_status_w/set
 ebusd/sensys/cooling_status_w/set
 ```
 
-with "on" or "off" will activate/deactivate the desired feature.
+with "on" or "off" will activate/deactivate the desired feature. If using HA automations to publish MWTT messages to change parameters you can use also the numeric form, 0 for OFF 1 for ON, this is also valid for multiple choice parameters.
+
 
 **BEWARE:** I have tested these changes only with my system, use it at your own risk. I've had no error and the settings change are detected by the HVAC systems and are reflected on the thermostat (sensys for Ariston brand) and on the remote thermo website so the system is accepting these commands. Pay attention on the firsts uses to ebusd logs for arbitration loss or other errors, adding some latency and retry parameters to ebusd command line/docker run chould mitigate/solve the problem. 
+**BEWARE2:** I have added upon request the writing lines also for Z2 and Z3, but I haven't been able to test these as I have a single zone system
  
 **NOTE FOR HOME ASSISTANT INTEGRATION:** All writing rules added to the CSV (the one above and the ones related to the most frequently modified parameters), are unavailable in HA until you edit the mqtt-hassio.cfg line related to filtering the data direction:
 
@@ -82,7 +89,8 @@ should be modified as follow:
 
 I've added version of my mqtt-hassio.cfg file, that has the write filter removed and with other minor changes to map correctly ebusd data in HA
 
-As a rule for the writing enabled parameters you should impose correct limits and stepping on the input variables in HA to avoid sending on the bus wrong/unsupported values (eg. temp of 21,33333333°C where the stepping is 0.1 or 0.5 degrees). The limits and the stepping should be set following the HVAC installer manual for the specific configuration (eg. the tmin and Tmax are for an underfloor heating configuration). 
+**ANOTHER IMPORTANT NOTE:** you MUST impose correct limits and stepping on the input variables in HA to avoid sending on the bus wrong/unsupported values (eg. temp of 21,33333333°C where the stepping is 0.1 or 0.5 degrees), otherwise the system may fallback to some default value upon writing the wrong value parameter.
+The limits and the stepping should be set following the HVAC installer manual for the specific configuration (eg. the tmin and Tmax are for an underfloor heating configuration). 
 To impose those limits I use this section of the configuration.yaml in HA:
 
 ```
@@ -178,5 +186,6 @@ All the working codes are the result of a fantastic job made by some user of the
 Some boiler codes came from https://github.com/komw/ariston-bus-bridgenet-ebusd.
 
 The writing rules are inspired by ysard repo https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet , from the same repo I've used the error messages brute force discovery script to find the meaning of the codes sent on the bus.
+
 
 
