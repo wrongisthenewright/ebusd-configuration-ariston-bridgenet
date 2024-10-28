@@ -1,12 +1,13 @@
 # template name,type / templates,divider / values,unit,comment
-onoff,BCD,0=off;1=on,,
+onoff,BCD,0=off;1=on
 heat_thermoreg_types,UCH,0=fixed_temp;1=basic_on_off;2=room_temp_only;3=outdoor_temp_only;4=outdoor_and_room
-cool_thermoreg_types,UCH,0=on-off;1=fixed_temp;2=toom_temp,,
-hybrid_mode,UCH,0=auto;1=boiler_only;2=hp_only,,
-heat_request_mode,UCH,0=standard;1=no_time_program;2=forced,,
-heat_temp_range,UCH,0=underfloorheating;1=fancoil,,
-pump_operation,UCH,0=low_speed;1=high_speed;2=modulating,,
-cool_temp_range,UCH,0=fancoil;1=underfloorheating,,
+cool_thermoreg_types,UCH,0=on-off;1=fixed_temp;2=toom_temp
+hybrid_mode,UCH,0=auto;1=boiler_only;2=hp_only
+heat_request_mode,UCH,0=standard;1=no_time_program;2=forced
+#heat_temp_range,UCH,0=underfloorheating;1=fancoil,,
+pump_operation,UCH,0=low_speed;1=high_speed;2=modulating
+#cool_temp_range,UCH,0=fancoil;1=underfloorheating,,
+
 # Error codes grabbed with Ysard brute force script
 # see https://github.com/ysard/ebusd_configuration_chaffoteaux_bridgenet?tab=readme-ov-file#bruteforce-the-errors-to-discover-their-corresponding-codes
 # it seems the codes are specific per each device/system configuration, these are valid for Ariston Hybrid system (Nimbus 70M + Genus One Hybrid Net)

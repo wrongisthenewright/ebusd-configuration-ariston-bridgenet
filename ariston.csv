@@ -53,7 +53,7 @@ r,sensys,remote_command_sw_version,RC-SW-Ver,,75,2002,000000,ign,s,IGN:3,,,,valu
 r,sensys,boiler_sw_version,Boiler-SW-Ver,,3c,2002,000000,ign,s,IGN:1,,,,value,s,HEX:3
 r,sensys,energymgr_sw_version,Boiler-SW-Ver,,18,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 r,sensys,heatpump_sw_version,Boiler-SW-Ver,,1e,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
-r,sensys,23_sw_version,Boiler-SW-Ver,,23,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
+r,sensys,Address_23_sw_version,Boiler-SW-Ver,,23,2002,000000,ign,s,IGN:1,,,,value,s,HEX:14
 
 
 ############################################################################################
@@ -129,7 +129,7 @@ w,boiler,maintenance_warnings_enabled,Enable warning on next maintenance,,3c,202
 ############################################################################################
 
 #Energy Manager - User Parameters
-r,energymgr,heat_mode,Heating Mode,,18,2000,1c22,,s,IGN:1,,,,,,BCD,0=green;1=standard
+r,energymgr,heat_mode,HV IN 1,,18,2000,1c22,,s,IGN:1,,,,,,BCD,0=green;1=standard
 r,energymgr,dhw_pv_delta_t_setp,PV Delta T DHW setpoint temp,,18,2000,762d,,s,IGN:1,,,,,,SIN,10,°C
 
 #Energy Manager - I/O Settings
@@ -148,20 +148,16 @@ w,energymgr,hp_disable_ext_temp_threshold,HP disable ext. temp threshold,,fe,202
 r,energymgr,boiler_disable_ext_temp_threshold,Boiler disable ext. temp threshold,,18,2000,7126,,s,IGN:1,,,,,,SIN,10,°C
 w,energymgr,boiler_disable_ext_temp_threshold,Boiler disable ext. temp threshold,,fe,2020,7126,,s,SIN,10,°C
 r,energymgr,heating_mode,Heating Mode,,18,2000,c728,,s,IGN:1,,,,,,BCD,0=eco;1=eco_plus;2=average;3=comfort;4=comfort_plus
-w,energymgr,heating_mode,Heating Mode,,fe,2020,c728,,s,BCD,0=eco;1=eco_plus;2=average;3=comfort;4=comfort_plus
 r,heatpump,heat_LWT_offset,HP Heating LWT Correction,,18,2000,7d2b,,s,IGN:1,,,,,,SIN,10,°C
-w,heatpump,heat_LWT_offset,HP Heating LWT Correction,,fe,2020,7d2b,,s,SIN,10,°C
 r,heatpump,boost_time,HP boost time,,18,2000,602b,,s,IGN:1,,,,,,MIN,,min
 #r,energymgr,ext_temp_offset,External Temp Correction,,18,2000,7426,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,protech_anode,ProTech Anode,,18,2000,0d23,,s,IGN:1,,,,,s,onoff
 r,energymgr,pump_antiblock,Pump Antiblocking,,18,2000,1823,,s,IGN:1,,,,,s,onoff
-w,energymgr,pump_antiblock,Pump Antiblocking,,fe,2020,1823,,s,onoff
 
 #Energy Manager - Cooling
 r,energymgr,cooling_available,Cooling Function Available,,18,2000,1023,,s,IGN:1,,,,,s,onoff
 r,energymgr,cool_anticycle_time,HP Cooling Anticycle Delay,,18,2000,d927,,s,IGN:1,,,,,,UCH,,min
 r,heatpump,cool_LWT_temp_offset,HP Cooling LWT Correction,,18,2000,7f2b,,s,IGN:1,,,,,,SIN,10,°C
-w,heatpump,cool_LWT_temp_offset,HP Cooling LWT Correction,,fe,2020,7f2b,,s,SIN,10,°C
 r,energymgr,hybrid_mode,Hybrid Mode,,18,2000,c628,,s,IGN:1,,,,,,BCD,0=auto;1=boiler_only;2=hp_only
 w,energymgr,hybrid_mode,Hybrid Mode,,fe,2020,c628,,s,BCD
 r,energymgr,hybrid_logic,Hybrid Logic,,18,2000,ce28,,s,IGN:1,,,,,,BCD,0=max_saving;1=max_eco
@@ -216,9 +212,10 @@ b,energymgr,z1_setpoint_temp,Z1 Current Setpoint,,fe,200f,6996,,s,SIN,10,°C,,,,
 r,energymgr,z1_heat_request,Z1 Heating Request,,18,2000,0191,,s,IGN:1,,,,,s,onoff
 #Z1 Cooling Settings
 r,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,18,2000,7071,,s,IGN:1,,,,,,SIN,10,°C
-b,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,fe,200f,7071,,s,SIN,10,°C
+b,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,fe,200f,7071,z1_cool_setpoint_temp,s,SIN,10,°C
 w,energymgr,z1_cool_setpoint_temp_set,Z1 Cooling Forced Setpoint Temp,,fe,2020,7071,,s,SIN,10,°C
 r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
+#r,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,18,2000,0681,,s,IGN:1,,,,,,BCD
 w,energymgr,z1_cool_temp_range,Z1 cooling Temp Range,,fe,2020,0681,,s,BCD
 r,energymgr,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,18,2000,CB79,,s,IGN:1,,,,,,BCD,0=on-off;1=fixed_temp;2=toom_temp
 w,energymgr,z1_cool_therm_type_selection,Z1 Cooling Thermoreg Type Selection,,fe,2020,CB79,,s,BCD
@@ -268,7 +265,7 @@ b,energymgr,z2_setpoint_temp,Z2 Current Setpoint,,fe,200f,6A96,,s,SIN,10,°C,,,,
 r,energymgr,z2_heat_request,Z2 Heating Request,,18,2000,0291,,s,IGN:1,,,,,s,onoff
 #Z2 Cooling Settings
 r,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Forced Setpoint Temp,,18,2000,7072,,s,IGN:1,,,,,,SIN,10,°C 
-b,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Forced Setpoint Temp,,fe,200f,7072,,s,SIN,10,°C
+b,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Forced Setpoint Temp,,fe,200f,7072,z2_cool_setpoint_temp,s,SIN,10,°C
 w,energymgr,z2_cool_setpoint_temp_set,Z2 Cooling Set Temp,,fe,2020,7072,,s,SIN,10,°C
 r,energymgr,z2_cool_temp_range,Z2 cooling Temp Range,,18,2000,0682,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
 w,energymgr,z2_cool_temp_range,Z2 cooling Temp Range,,fe,2020,0682,,s,BCD
@@ -319,7 +316,7 @@ b,energymgr,z3_setpoint_temp,Z3 Current Setpoint,,fe,200f,6B96,,s,SIN,10,°C,,,,
 r,energymgr,z3_heat_request,Z3 Heating Request,,18,2000,0391,,s,IGN:1,,,,,s,onoff
 #Z3 Cooling Settings
 r,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,18,2000,7073,,s,IGN:1,,,,,,SIN,10,°C
-b,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,fe,200f,7073,,s,SIN,10,°C
+b,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,fe,200f,7073,z3_cool_setpoint_temp,s,SIN,10,°C
 w,energymgr,z3_cool_setpoint_temp_set,Z3 Cooling Forced Setpoint Temp,,fe,2020,7073,,s,SIN,10,°C
 r,energymgr,z3_cool_temp_range,Z3 cooling Temp Range,,18,2000,0683,,s,IGN:1,,,,,,BCD,0=fancoil;1=underfloorheating
 w,energymgr,z3_cool_temp_range,Z3 cooling Temp Range,,fe,2020,0683,,s,BCD
@@ -358,8 +355,8 @@ b,energymgr,cooling_temps,Cooling Temps Range,,fe,2020,6a75,z1_cool_temp,s,SIN,1
 b,energymgr,cooling_temp_range,Cooling Temp Range,13,fe,2020,0085010086010087010681,z1_cool_range,m,BCD,0=fancoil;1=underfloorheating
 b,energymgr,cool_slope,Cooling Slope,,fe,2020,7577,ign,m,IGN:4,,,,z1_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z2_cool_slope,s,UIN,100,,,,s,IGN:2,,,,z3_cool_slope,s,UIN,100
 #r,energymgr,z1_cool_therm_type_selection,Z1 Heating Thermoreg Type Selection,13,fe,2020,c97e04c97f04cb79,,s,BCD,0=fixed_temp;1=basic_on_off;2=outdoor_temp_only;3=room_temp_only;4=outdoor_and_room
-b,energymgr,night_temp_settings,,13,fe,2020,6277,6277_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z3_night_temp,m,SIN,10,°C
-b,energymgr,day_temp_settings,,13,fe,2020,6176,6176_UIN,m,SIN,10,°C,,,m,IGN:2,,,,6177_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_day_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_day_temp,m,SIN,10,°C
+b,energymgr,night_temp_settings,,13,fe,2020,6277,Param_6277_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_night_temp,m,SIN,10,°C,,,m,IGN:2,,,,z3_night_temp,m,SIN,10,°C
+b,energymgr,day_temp_settings,,13,fe,2020,6176,Param_6176_UIN,m,SIN,10,°C,,,m,IGN:2,,,,Param_6177_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_day_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_day_temp,m,SIN,10,°C
 
 #DHW Temp settings
 r,energymgr,dhw_comfort_temp,DHW Comfort Temp,,18,2000,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
@@ -475,7 +472,7 @@ r,heatpump,heatpump_power_consumption,Heatpump Power Consumption,,1e,2000,63477c
 #Message not sent anymore (FW update??)
 #r,heatpump,compressor_info,Heatpump Compressor Data,7f,1e,2000,cb4673177217,,s,IGN:1,,,,compressor_frequency,s,UCH,,Hz,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
 r,heatpump,compressor_info2,Heatpump Compressor Data2,13,1e,2000,72177317ca466247,,s,IGN:1,,,,compressor_suction_temp,s,SIN,10,°C,,compressor_discharge_temp,s,SIN,10,°C
-r,heatpump,compressor_info,Heatpump Compressor Data,13,1e,2000,6e13cb46d84b,,s,IGN:1,,,,flow_meter,s,UIN,10,L,,compressor_frequency,s,UCH,,,,684b,s,UCH,1,X
+r,heatpump,compressor_info,Heatpump Compressor Data,13,1e,2000,6e13cb46d84b,,s,IGN:1,,,,flow_meter,s,UIN,10,L,,compressor_frequency,s,UCH,,,,Param_684b,s,UCH,1,X
 
 #r,heatpump,water_flow_info,Heatpump Water Flow Data,13,1e,2000,7610771079106e13,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,flow_meter,s,UIN,10,L
 r,heatpump,coolat_data,Heatpump Coolant Data,13,1e,2000,7610771079107117,,s,IGN:1,,,,LWT_temp,s,SIN,10,°C,,EWT_temp,s,SIN,10,°C,,evaporator_temp,s,SIN,10,°C,,coolant_temp,s,SIN,10,°C
@@ -568,3 +565,96 @@ b,ignored,ign5,QQfe2050XXXXX,,fe,2050,,ign,m,IGN:11
 # 13fe20100c059100000691000007910000 
 # 0591, 0691, 0791 are Z5,6,7 heat request, discarded as not relevant to my use case
 b,ignored,ign6,QQfe2010XX0591,,fe,2010,0591,ign,m,IGN:10
+
+
+############################################################################################
+####                           TEST DECODING MESSAGES                                   ####
+############################################################################################
+
+
+#703c2001020445 03000001 - 820 - no
+r,test,boiler_burner_power_pct,Bolier Power PCT,,3c,2001,0445,Param_0445_power,s,UCH,,pct
+
+#703c200102c300 030000ff - 827 - yes
+r,test,boiler_pump_modulation,Bolier Pump Modulation,,3c,2001,c300,c300_modulation,s,UCH,,pct
+
+#13 1e 2020 0d c33e c8 c446 64 cd46 03 6a42 9401
+# c33e unknown
+# c446 is hp comr modulation
+# 6a42 is target temp + heating offset
+# cd 46 seems related to hp_mode
+r,test,hp_unkn,Unkns,13,1e,2020,c33e,c33e,m,UCH,1,X,,,m,IGN:2,,,,hp_compr_modulation,m,UCH,1,PCT,,,m,IGN:2,,,,cd46,m,UCH,1,X,,,m,IGN:2,,,,Param_6a42_target_temp,m,SIN,10,°C
+
+#13 1e 2000 04 0845 1945 
+r,test,hp_unkn2,Unkns2,,1e,2000,08451945,,s,IGN:1,,,,Param_0845_unk,s,onoff,,,,Param_1945unk,s,onoff
+
+
+#7f fe 2010 09 7617 ee0000 c19a 0100
+b,test,hp_unkn3,Unkns3,,fe,2010,7617,Param_7617_unk,m,S3N,10,°C,,,,IGN:2,,,,c19a_unk,m,SIN
+#b,test,hp_unkn3,Unkns3,,fe,2010,7617,7617_unk,s,SIN,10,X
+
+
+
+#13 1e 2020 0d ce9c 78 d09c 02 659f 3200 d5f0 00
+
+#13 37 2020 0c c604 00 c13d 00 c23d 00 c246 01
+
+
+#703c2001020241 
+#r,test_boiler,unk1,,,3c,2001,0241,,s,UCH
+
+#703c2001020668 
+#r,test_boiler,unk2,,,3c,2001,0668,,s,UCH
+
+#703c200102c0f2 
+#r,test_boiler,unk3,,,3c,2001,c0f2,,s,UCH
+
+#703c200102c328 
+#r,test_boiler,unk4,,,3c,2001,c328,,s,UCH
+
+#703c200102c428 
+#r,test_boiler,unk5,,,3c,2001,c428,,s,UCH
+
+#703c200102d628 
+#r,test_boiler,unk6,,,3c,2001,d628,,s,UCH
+
+#703c200102d69c 
+#r,test_boiler,unk7,,,3c,2001,d69c,,s,UCH
+
+#703c20010240fb
+#r,test_boiler,unk8,,,3c,2001,40fb,,s,SIN
+
+#703c200102612b
+#r,test_boiler,unk9,,,3c,2001,612b,,s,SIN
+
+#703c200102622b
+#r,test_boiler,unk10,,,3c,2001,622b,,s,SIN
+
+#703c2001026710
+#r,test_boiler,unk11,,,3c,2001,6710,,s,SIN
+
+#13fe201008c64b0200c94b0200
+#r,test_boiler,unk12,,13,fe,2010,c64b,c64b,m,SIN,,,,,m,IGN:2,,,,c69b,m,SIN
+
+#13 1e 2020 0c 0b45 00 1745 00 1a45 00 1ef3 00 / 00
+#r,test_boiler,unk13,,13,1e,2020,0b45,0b45,m,UCH,,,,,m,IGN:2,,,,1745,m,UCH,,,,,m,IGN:2,,,,1a45,m,UCH,,,,,m,IGN:2,,,,1ef3,m,UCH
+
+# 13 1e 2020 0d ce9c 78 d09c 02 659f 4600 d5f0 00 / 00 
+# 13 1e 2020 0c ce9c 78 d09c 00 d89c 01 df9c 00
+# 13 1e 2020 0d ce9c 78 d09c 00 659f 4600 d5f0 00
+#r,test_boiler,unk14,,13,1e,2020,ce9c,ce9c,m,UCH,,,,,m,IGN:2,,,,d09c,m,UCH,,,,,m,IGN:2,,,,659f,m,SIN,,,,,m,IGN:2,,,,d5f0,m,UCH
+
+#37fe201004d7420000 
+#r,test_boiler,unk15,,37,fe,2010,d742,,m,SIN
+
+#37 fe 2010 09 6147 640000 d746 0000 
+#r,test_boiler,unk16,,37,fe,2010,6147,6147,m,S3N,,,,,m,IGN:2,,,,d746,m,SIN
+
+#37 fe 2010 08 da46 9600 d3f2 0100 
+#r,test_boiler,unk17,,37,fe,2010,da46,da46,m,SIN,,,,,m,IGN:2,,,,d3f2,m,SIN
+
+#13 37 2020 0c c604 00 c13d 00 c23d 00 c246 01 
+#r,test_boiler,unk18,,13,37,2020,c604,c604,m,SCH,1,PCT,,,m,IGN:2,,,,c13d,m,SCH,,,,,m,IGN:2,,,,c23d,m,SCH,,,,,m,IGN:2,,,,c246,m,SCH
+
+#13 fe 2010 08 c64b be00 c94b 0000
+#r,test_boiler,unk19,,13,fe,2010,c64b,c64b,m,SIN,,,,,,IGN:2,,,,c94b,m,SIN
