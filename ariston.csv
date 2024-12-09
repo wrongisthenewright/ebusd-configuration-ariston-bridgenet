@@ -359,16 +359,16 @@ b,energymgr,night_temp_settings,,13,fe,2020,6277,Param_6277_UIN,m,SIN,10,°C,,,m
 b,energymgr,day_temp_settings,,13,fe,2020,6176,Param_6176_UIN,m,SIN,10,°C,,,m,IGN:2,,,,Param_6177_UIN,m,SIN,10,°C,,,m,IGN:2,,,,z1_day_temp,m,SIN,10,°C,,,m,IGN:2,,,,z2_day_temp,m,SIN,10,°C
 
 #DHW Temp settings
-r,energymgr,dhw_comfort_temp,DHW Comfort Temp,,18,2000,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,energymgr,dhw_comfort_temp,DHW Comfort Temp,,18,2000,6126,,s,IGN:1,,,,,,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 b,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,200e,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 w,energymgr,dhw_comfort_temp,DHW Comfort Temp,,fe,2020,6126,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,dhw_economy_temp,DHW Economy Temp,,18,2000,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
+r,energymgr,dhw_economy_temp,DHW Economy Temp,,18,2000,6226,,s,IGN:1,,,,,,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 b,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,200e,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
 w,energymgr,dhw_economy_temp,DHW Economy Temp,,fe,2020,6226,,s,SIN,10,°C,,,,,,,,,,,,,,,,,,,,,,
-r,energymgr,dhw_comfort_mode,DHW Comfort Mode,,18,2000,c028,,s,BCD,0=off;1=timed;2=always_on
+r,energymgr,dhw_comfort_mode,DHW Comfort Mode,,18,2000,c028,,s,IGN:1,,,,,,BCD,0=off;1=timed;2=always_on
 b,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,200e,c028,,s,BCD,0=off;1=timed;2=always_on
 w,energymgr,dhw_comfort_mode,DHW Comfort Mode,,fe,2020,c028,,s,BCD,0=off;1=timed;2=always_on
-r,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,18,2000,0b20,,s,onoff
+r,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,18,2000,0b20,,s,IGN:1,,,,,,onoff
 b,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,200e,0b20,,s,onoff
 w,energymgr,dhw_thermal_cleansing_mode,DHW Thermal Cleansing Function,,fe,2020,0b20,,s,onoff
 
