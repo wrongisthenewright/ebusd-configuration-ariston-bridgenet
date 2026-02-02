@@ -165,6 +165,10 @@ r,heatpump,boost_time,HP boost time,,18,2000,602b,,s,IGN:1,,,,,,MIN,,min
 #r,energymgr,ext_temp_offset,External Temp Correction,,18,2000,7426,,s,IGN:1,,,,,,SIN,10,°C
 r,energymgr,protech_anode,ProTech Anode,,18,2000,0d23,,s,IGN:1,,,,,s,onoff
 r,energymgr,pump_antiblock,Pump Antiblocking,,18,2000,1823,,s,IGN:1,,,,,s,onoff
+r,energymgr,em_delta_t,EM Delta T for Modulation,,18,2000,7b2b,,s,IGN:1,,,,,,SIN,10,°C
+b,energymgr,em_delta_t,EM Delta T for Modulation,,fe,200f,7b2b,,,SIN,10,°C
+w,energymgr,em_delta_t,EM Delta T for Modulation,,fe,2020,7b2b,,s,SIN,10,°C
+
 
 #Energy Manager - Cooling
 r,energymgr,cooling_available,Cooling Function Available,,18,2000,1023,,s,IGN:1,,,,,s,onoff
