@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Provide some info
+about: Please use this template not the blank one...
 title: ''
 labels: ''
 assignees: ''
