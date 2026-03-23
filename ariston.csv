@@ -107,13 +107,13 @@ r,boiler,boiler_current_modulation,Boiler Current Gas Modulation,,3c,2000,c404,i
 #Boiler Broadcasted messages
 b,boiler,boiler_status,Boiler Status,,fe,2010,c04b,boilerstatus,,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame
 r,boiler,boiler_status,Boiler Status,,3c,2000,c04b,ign,s,IGN:1,,,,boilerstatus,s,UCH,1=standby;2=heating;3=heating hot water;4=water tank;5=circulating;23=manual test;24=comfort;31=gas_circuit_deaeration;36=auto_calibration;51=low_water_pressure;52=no_flame
-r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,heat_min_power_pct,Heating Bolier Min Power PCT,,3c,2000,6429,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,slow_ignition_power_pct,Slow Ignition Power PCT,,3c,2000,6529,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,heat_max_adj_power_pct,Heating Bolier Max Adjustable Power PCT,,3c,2000,6629,ign,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,pump_max_pwm,Pump Max PWM,,3c,2000,c928,,s,IGN:1,,,,,s,UCH,,pct
-r,boiler,pump_min_pwm,Pump Min PWM,,3c,2000,ca28,,s,IGN:1,,,,,s,UCH,,pct
+r,boiler,dhw_max_power_pct,DHW Bolier Max Power PCT,,3c,2000,6229,ign,s,IGN:1,,,,,s,UIN,,pct
+r,boiler,heat_max_power_pct,Heating Bolier Max Power PCT,,3c,2000,6329,ign,s,IGN:1,,,,,s,UIN,,pct
+r,boiler,heat_min_power_pct,Heating Bolier Min Power PCT,,3c,2000,6429,ign,s,IGN:1,,,,,s,UIN,,pct
+r,boiler,slow_ignition_power_pct,Slow Ignition Power PCT,,3c,2000,6529,ign,s,IGN:1,,,,,s,UIN,,pct
+r,boiler,heat_max_adj_power_pct,Heating Bolier Max Adjustable Power PCT,,3c,2000,6629,ign,s,IGN:1,,,,,s,UIN,,pct
+r,boiler,pump_max_pwm,Pump Max PWM,,3c,2000,c928,,s,IGN:1,,,,,s,UIN,,pct
+r,boiler,pump_min_pwm,Pump Min PWM,,3c,2000,ca28,,s,IGN:1,,,,,s,UIN,,pct
 r,boiler,pressure_monitoring_device,Pressure Monitoring Device,,3c,2000,c328,ign,s,IGN:1,,,,,s,UCH,0=temp_probe;1=pressure_switch;2=pressure_sensor
 r,boiler,warning_pressure,Water Warning Pressure,,3c,2000,c12a,ign,s,IGN:1,,,,,s,UCH,10,bar
 r,boiler,ignition_delay,Ignition Delay,,3c,2000,c027,ign,s,IGN:1,,,,,s,UCH,,min
